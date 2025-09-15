@@ -51,6 +51,7 @@ SIMPLE_JWT = {
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -105,6 +106,35 @@ DATABASES = {
         "HOST": os.getenv("DB_HOST"), 
         "PORT": os.getenv("DB_PORT"), 
     } 
+}
+
+
+JAZZMIN_SETTINGS = {
+    "site_title": "SkillLearn Admin",
+    "site_header": "SkillLearn Dashboard",
+    "site_brand": "SkillLearn",
+    "welcome_sign": "Welcome to SkillLearn Admin Panel",
+    "copyright": "SkillLearn Platform © 2025",
+    
+    # Optional: use your own logo (put logo in static folder)
+    "site_logo": "images/logo.png",
+    "site_logo_classes": "img-circle",
+
+    # Icons for your models (FontAwesome icons)
+    "icons": {
+        "auth.user": "fas fa-user",
+        "auth.Group": "fas fa-users",
+        "api.Skill": "fas fa-lightbulb",
+        "api.Lesson": "fas fa-book",
+        "api.QuizQuestion": "fas fa-question-circle",
+        "api.UserProgress": "fas fa-chart-line",
+        "api.Review": "fas fa-comments",
+    },
+
+    # Sidebar
+    "navigation_expanded": True,
+    "hide_apps": [],
+    "hide_models": [],
 }
 
 
