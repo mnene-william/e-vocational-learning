@@ -19,4 +19,15 @@ class SkillSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class LessonSerializer(serializers.ModelSerializer):
-    
+    category = SkillSerializer(read_only=True)
+    category_id = serializers.PrimaryKeyRelatedField(
+
+        queryset=Skill.objects.all(), source="category", write_only=True
+    )
+
+    class Meta:
+        model = Lesson
+
+        fields = ["id", "title", "content", "video", "video_url", "created_at", "category", "category_id"]
+
+c
