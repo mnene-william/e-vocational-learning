@@ -23,7 +23,7 @@ class LessonViewSet(viewsets.ModelViewSet):
     serializer_class = LessonSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-class QuizQuestionViewset(viewsets.ModelViewSet):
+class QuizQuestionViewSet(viewsets.ModelViewSet):
     queryset = QuizQuestion.objects.all()
     serializer_class = QuizQuestionSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
