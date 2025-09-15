@@ -21,21 +21,21 @@ class SkillViewSet(viewsets.ModelViewSet):
 class LessonViewSet(viewsets.ModelViewSet):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
-    permission_classses = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 class QuizQuestionViewset(viewsets.ModelViewSet):
     queryset = QuizQuestion.objects.all()
     serializer_class = QuizQuestionSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-class UserProgressViewSet(viewsets.ModelVieSet):
+class UserProgressViewSet(viewsets.ModelViewSet):
     queryset = UserProgress.objects.all()
     serializer_class = UserProgressSerializer
     permission_classes = [permissions.IsAuthenticated]
 
 
-class ReviewViewSet(viewsets.ModelVieSet):
-    queryset = UserProgress.objects.all()
-    serializer_class = UserProgressSerializer
+class ReviewViewSet(viewsets.ModelViewSet):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
     permission_classes = [permissions.IsAuthenticated]
 
