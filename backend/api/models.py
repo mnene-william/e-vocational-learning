@@ -1,4 +1,7 @@
 from django.db import models
+from django.contrib.auth import get_user_model
+
+User = get_user_model
 
 # Create your models here.
 class Skill(models.Model):
@@ -33,8 +36,17 @@ class QuizQuestion(models.Model):
     def __str__(self):
         return f"{self.lesson.title} - {self.question_text[:200]}"
     
+class UserProgress(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
+    completed = models.BooleanField(default=False)
+    last_attempted = models.DateTimeField(auto_now=True)
+
+
+    def __str__ (self):
+        return f"{self.user} - {self.lesson.title}"
     
-    
+
     
 
 
