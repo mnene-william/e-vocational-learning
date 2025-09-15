@@ -30,4 +30,10 @@ class LessonSerializer(serializers.ModelSerializer):
 
         fields = ["id", "title", "content", "video", "video_url", "created_at", "category", "category_id"]
 
-c
+class QuizQuestionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = QuizQuestion
+        fields = "__all__"
+
+class UserProgressSerializer(serializers.ModelSerializer):
+    
