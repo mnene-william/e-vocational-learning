@@ -36,4 +36,17 @@ class QuizQuestionSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class UserProgressSerializer(serializers.ModelSerializer):
-    
+    user = UserSerializer(read_only=True)
+
+    class Meta:
+        model = UserProgress
+        fields = "__all__"
+
+class ReviewSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+
+    class Meta:
+        model = Review
+        fields = "__all__"
+
+        
