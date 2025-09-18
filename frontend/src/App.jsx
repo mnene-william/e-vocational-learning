@@ -18,7 +18,14 @@ function App() {
         <Routes>
 
           <Route path="/login" element={<Login />} />
-          <
+
+          <Route path="/lessons" element={<ProtectedRoute><LessonList /></ProtectedRoute>} />
+
+          <Route path="/lessons/:id" element={<ProtectedRoute><LessonDetail /></ProtectedRoute>} />
+
+          <Route path="/userprogress" element={<ProtectedRoute><UserProgress /></ProtectedRoute>} />
+
+          
 
         
         </Routes>
