@@ -9,13 +9,17 @@ function ProtectedRoute({ children }) {
   const [isAuthorized, setIsAuthorized] = useState(null);
 
   useEffect(() => {
+
     auth().catch(() => setIsAuthorized(false));
+
   }, []);
 
   // Refresh token if expired
   const refreshToken = async () => {
     const refresh = localStorage.getItem(REFRESH_TOKEN);
+
     if (!refresh) {
+
       setIsAuthorized(false);
       return;
     }
@@ -25,10 +29,12 @@ function ProtectedRoute({ children }) {
       if (res.status === 200) {
         localStorage.setItem(ACCESS_TOKEN, res.data.access);
         setIsAuthorized(true);
+
       } else {
         setIsAuthorized(false);
       }
     } catch (error) {
+
       console.error("Refresh token failed:", error);
       setIsAuthorized(false);
     }
@@ -36,7 +42,10 @@ function ProtectedRoute({ children }) {
 
   // Check if access token is valid
   const auth = async () => {
+
     const token = localStorage.getItem(ACCESS_TOKEN);
+
+
     if (!token) {
       setIsAuthorized(false);
       return;
@@ -49,9 +58,12 @@ function ProtectedRoute({ children }) {
 
       if (tokenExpiration < now) {
         await refreshToken();
+
       } else {
+
         setIsAuthorized(true);
       }
+      
     } catch (error) {
       console.error("Token decoding failed:", error);
       setIsAuthorized(false);
