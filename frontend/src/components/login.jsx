@@ -11,3 +11,22 @@ export default function Login(){
     const navigate = useNavigate()
 }
 
+const handleLogin = async (e) => {
+    e.preventDefault()
+    setError("")
+
+    try{
+        const response = await  api.post("token/", {username, password})
+        localStorage.setItem(ACCESS_TOKEN, response.data.access);
+        localStorage.setItem(REFRESH_TOKEN, response.data.refresh)
+
+        navigate("/home");
+
+    } 
+    catch(err){
+
+        console.error(err)
+
+        setError(err.response?.data?.detail  || "Login Failed.Check your Credentials.");
+    }
+}
