@@ -24,20 +24,14 @@ function SignUp(){
 
         try{
 
-            await api.post("register/", {
 
-                username,
-                email,
-                password,
 
-            });
+            const response = await api.post("user/register/", {username, password});
 
-            const response = await api.post("token/", {username, password});
-
-            localStorage.seItem(ACCESS_TOKEN, response.data.access);
+            localStorage.setItem(ACCESS_TOKEN, response.data.access);
             localStorage.setItem(REFRESH_TOKEN, response.data.refresh);
 
-            navigate("/home")
+            navigate("/lessons")
 
 
         }

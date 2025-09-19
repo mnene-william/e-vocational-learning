@@ -9,7 +9,7 @@ from .serializers import *
 class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.AllowAny]
 
 
 class SkillViewSet(viewsets.ModelViewSet):

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import api from "../api";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
 
@@ -19,7 +19,7 @@ function Login() {
 
       localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
 
-      navigate("/home"); 
+      navigate("/lessons"); 
 
     } catch (err) {
       setError("Invalid username or password");
@@ -51,7 +51,7 @@ function Login() {
 
             <input
               type="text"
-              
+
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
@@ -83,6 +83,14 @@ function Login() {
             Sign In
           </button>
         </form>
+
+        <p className="text-sm text-center text-gray-600">
+          Don’t have an account?{" "}
+          <Link to="/signup" className="text-blue-600 hover:underline">
+            Sign up
+          </Link>
+        </p>
+
       </div>
     </div>
   );
