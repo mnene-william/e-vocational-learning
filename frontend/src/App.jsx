@@ -6,6 +6,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import UserProgress from './components/UserProgess';
 import Login from './components/login';
 import SignUp from './components/SignUp';
+import HomePage from './components/HomePage';
 
 
 import './App.css'
@@ -19,11 +20,13 @@ function App() {
       <Router>
         <Routes>
 
-          <Route path="/" element={<Navigate to="/login" />} />
+          <Route path="/" element={<Navigate to="/home" />} />
 
           <Route path="/login" element={<Login />} />
 
           <Route path="/signup" element={<SignUp />} />
+
+          <Route path="/home" element={<HomePage />} />
 
           <Route path="/lessons" element={<ProtectedRoute><LessonList /></ProtectedRoute>} />
 
