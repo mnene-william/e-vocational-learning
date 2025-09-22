@@ -24,7 +24,7 @@ function Login() {
 
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-purple-700 via-indigo-900 to-black">
-      {/* Cinematic Background Animation */}
+
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 0.25 }}
@@ -32,7 +32,7 @@ function Login() {
         className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1650&q=80')] bg-cover bg-center"
       />
 
-      {/* Form Card */}
+ 
       <motion.div
         initial={{ y: 100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -101,10 +101,11 @@ function Login() {
           transition={{ delay: 1 }}
           className="mt-4 text-center text-sm text-gray-700"
         >
-          Don’t have an account?{" "}
+          Don’t have an account?
           <Link to="/signup" className="font-semibold text-indigo-600 hover:underline">
             Sign Up
           </Link>
+          
         </motion.p>
       </motion.div>
     </div>

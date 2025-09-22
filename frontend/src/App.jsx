@@ -8,6 +8,7 @@ import Login from './components/login';
 import SignUp from './components/SignUp';
 import HomePage from './components/HomePage';
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 
 
 import './App.css'

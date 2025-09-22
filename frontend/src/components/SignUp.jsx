@@ -67,10 +67,12 @@ function SignUp() {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
+
           <motion.div whileFocus={{ scale: 1.02 }}>
             <label className="block text-sm font-medium text-gray-700">
               Username
             </label>
+
             <input
               type="text"
               value={username}
@@ -78,6 +80,7 @@ function SignUp() {
               required
               className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200"
             />
+
           </motion.div>
 
           <motion.div whileFocus={{ scale: 1.02 }}>
@@ -129,14 +132,15 @@ function SignUp() {
           </motion.button>
         </form>
 
-        {/* Already have account link */}
+
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
           className="mt-6 text-center text-sm text-gray-600"
         >
-          Already have an account?{" "}
+            
+          Already have an account
           <Link to="/login" className="font-semibold text-indigo-600 hover:underline">
             Login
           </Link>
