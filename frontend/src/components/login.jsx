@@ -84,6 +84,16 @@ function Login() {
             />
           </motion.div>
 
+          <div className="flex justify-end text-sm">
+            <Link
+              to="/forgot-password"
+              className="text-indigo-600 hover:underline"
+            >
+              Forgot Password?
+            </Link>
+          </div>
+
+
           <motion.button
             whileHover={{ scale: 1.05, boxShadow: "0px 0px 12px rgba(79,70,229,0.7)" }}
             whileTap={{ scale: 0.95 }}
