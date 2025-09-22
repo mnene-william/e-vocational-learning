@@ -9,6 +9,7 @@ import SignUp from './components/SignUp';
 import HomePage from './components/HomePage';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import ForgotPassword from './components/ForgotPassword';
 
 
 import './App.css'
@@ -29,6 +30,8 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
 
           <Route path="/home" element={<HomePage />} />
+
+          <Route path="/forgot-password" element={<ForgotPassword />} />
 
       
 
