@@ -42,7 +42,7 @@ function formatYouTubeUrl(url) {
 
 // Extract video ID for thumbnail
 function extractYouTubeId(url) {
-    
+
   if (!url) return null;
 
   if (url.includes("watch?v=")) {
@@ -50,6 +50,7 @@ function extractYouTubeId(url) {
   }
 
   if (url.includes("youtu.be/")) {
+    
     return url.split("youtu.be/")[1].split("?")[0];
   }
 
