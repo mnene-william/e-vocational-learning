@@ -5,7 +5,7 @@ function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
 
-  // Check if user is logged in
+
   const token = localStorage.getItem("ACCESS_TOKEN");
   const isAuthenticated = !!token;
 

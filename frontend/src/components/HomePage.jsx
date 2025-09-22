@@ -19,6 +19,7 @@ export default function HomePage() {
 
 
   useEffect(() => {
+    
     api.get("/lessons/").then((res) => {
       setLessons(res.data);
     }).catch((err) => console.error("Error fetching lessons:", err));
