@@ -7,6 +7,7 @@ import UserProgress from './components/UserProgess';
 import Login from './components/login';
 import SignUp from './components/SignUp';
 import HomePage from './components/HomePage';
+import Navbar from './components/Navbar';
 
 
 import './App.css'
