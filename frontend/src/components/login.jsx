@@ -16,20 +16,19 @@ function Login() {
       const res = await api.post("token/", { username, password });
       localStorage.setItem(ACCESS_TOKEN, res.data.access);
       localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
-      navigate("/lessons");
+      navigate("/home");
     } catch (err) {
       setError("Invalid username or password");
     }
   };
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-purple-700 via-indigo-900 to-black">
-
+        <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-indigo-500 to-purple-600">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 0.25 }}
         transition={{ duration: 2 }}
-        className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1650&q=80')] bg-cover bg-center"
+
       />
 
  

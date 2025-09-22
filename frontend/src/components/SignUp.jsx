@@ -33,7 +33,7 @@ function SignUp() {
       localStorage.setItem(ACCESS_TOKEN, response.data.access);
       localStorage.setItem(REFRESH_TOKEN, response.data.refresh);
 
-      navigate("/lessons");
+      navigate("/home");
     } catch (err) {
       setError("Signup failed. Try another username/email.");
     }
@@ -140,7 +140,7 @@ function SignUp() {
           className="mt-6 text-center text-sm text-gray-600"
         >
             
-          Already have an account
+          Already have an account?
           <Link to="/login" className="font-semibold text-indigo-600 hover:underline">
             Login
           </Link>

@@ -30,6 +30,8 @@ function App() {
 
           <Route path="/home" element={<HomePage />} />
 
+      
+
           <Route path="/lessons" element={<ProtectedRoute><LessonList /></ProtectedRoute>} />
 
           <Route path="/lessons/:id" element={<ProtectedRoute><LessonDetail /></ProtectedRoute>} />
