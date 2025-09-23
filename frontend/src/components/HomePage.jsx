@@ -110,7 +110,7 @@ export default function HomePage() {
               >
                
                 <img
-                  src={`https://via.placeholder.com/400x250?text=${lesson.title}`}
+                  src={`https://via.placeholder.com/400x250?text=${lesson.placeholder_image}`}
                   alt={lesson.title}
                   className="rounded-t-xl w-full h-48 object-cover"
                 />

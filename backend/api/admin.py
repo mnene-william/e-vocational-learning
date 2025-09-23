@@ -9,7 +9,7 @@ class SkillAdmin(admin.ModelAdmin):
 
 @admin.register(Lesson)
 class LessonAdmin(admin.ModelAdmin):
-    list_display = ("title", "category", "created_at")
+    list_display = ("title", "category", "created_at", "placeholder_image")
     list_filter = ("category",)
     search_fields = ("title",)
 

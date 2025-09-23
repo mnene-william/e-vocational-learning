@@ -32,8 +32,9 @@ function LessonsList() {
 
 
             
-            <div className="h-40 bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center">
-              <span className="text-white text-5xl"></span>
+            <div className="h-48 w-full overflow-hidden rounded-t-2xl">
+
+              <img src={lesson.placeholder_image ? lesson.placeholder_image : "https://via.placeholder.com/400x250?text=Lesson"} alt={lesson.title} className="w-full h-full object-cover transform hover:scale-105 transition duration-300"/>
             </div>
 
             
