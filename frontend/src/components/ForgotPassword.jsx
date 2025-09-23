@@ -39,7 +39,7 @@ function ForgotPassword(){
 
 return(
     <>
-       <div>
+       <div className="min-h-screen flex items-center justify-center bg-gray-100">
           <motion.div initial={{opacity:0}} animate={{opacity:1}} className="w-full max-w-md rounded-2xl bg-white p-8 shadow-2xl backdrop-blur-lg">
 
             <h2 className="mb-6 text-center text-2xl font-bold text-gray-700">
