@@ -28,7 +28,7 @@ class LessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
 
-        fields = ["id", "title", "content", "video", "video_url", "created_at", "category", "category_id"]
+        fields = ["id", "title", "content", "video", "video_url", "created_at", "category", "category_id", "placeholder_image"]
 
 class QuizQuestionSerializer(serializers.ModelSerializer):
     class Meta:
