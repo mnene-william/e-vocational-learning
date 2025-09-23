@@ -17,7 +17,7 @@ function Navbar() {
   return (
     <header className="fixed top-0 left-0 right-0 z-20 bg-white/10 backdrop-blur-lg border-b border-white/20 shadow-md">
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-        {/* Logo */}
+       
         <Link
           to="/"
           className="text-xl font-extrabold bg-gradient-to-r from-indigo-400 to-pink-500 bg-clip-text text-transparent"
@@ -25,7 +25,8 @@ function Navbar() {
           E-vocational Learning
         </Link>
 
-        {/* Desktop Links */}
+        
+        
         <div className="hidden md:flex items-center space-x-6">
 
           <Link to="/" className="text-white hover:text-pink-400 transition">
@@ -36,7 +37,7 @@ function Navbar() {
             Explore
           </Link>
 
-          {/* Auth Buttons */}
+          
           {!isAuthenticated ? (
             <>
               <Link
@@ -125,6 +126,7 @@ function Navbar() {
           
           {isAuthenticated && (
             <button className="w-9 h-9 rounded-full flex items-center justify-center bg-gradient-to-r from-indigo-400 to-pink-500 shadow-md hover:scale-105 transition">
+                
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="white"

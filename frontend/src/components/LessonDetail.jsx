@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../api";
 
-export default function LessonDetail() {
+function LessonDetail() {
   const { id } = useParams();
   const [lesson, setLesson] = useState(null);
 
@@ -23,7 +23,7 @@ export default function LessonDetail() {
 
 
 
-function formatYouTubeUrl(url) {
+function formatYouTubeLink(url) {
   if (!url) return null;
 
 
@@ -31,17 +31,18 @@ function formatYouTubeUrl(url) {
     return url.replace("watch?v=", "embed/");
   }
 
-  // handle youtu.be short links
+
   if (url.includes("youtu.be/")) {
     const videoId = url.split("youtu.be/")[1].split("?")[0];
+
     return `https://www.youtube.com/embed/${videoId}`;
   }
 
-  return url; // fallback
+  return url; 
 }
 
-// Extract video ID for thumbnail
-function extractYouTubeId(url) {
+
+function getYouTubeId(url) {
 
   if (!url) return null;
 
@@ -50,7 +51,7 @@ function extractYouTubeId(url) {
   }
 
   if (url.includes("youtu.be/")) {
-    
+
     return url.split("youtu.be/")[1].split("?")[0];
   }
 
@@ -76,14 +77,14 @@ function extractYouTubeId(url) {
 
              <iframe
                 className="w-full h-64 sm:h-96 rounded-lg shadow"
-                src={formatYouTubeUrl(lesson.video_url)}
+                src={formatYouTubeLink(lesson.video_url)}
                 title={lesson.title}
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
 
               onError={(e) => {
-                 e.target.style.display = "none"; // hide iframe
+                 e.target.style.display = "none"; 
 
                  const thumbnail = document.getElementById(`thumb-${lesson.id}`);
 
@@ -92,10 +93,10 @@ function extractYouTubeId(url) {
                }}
             ></iframe>
 
-    {/* Thumbnail Fallback */}
+    
             <img
                id={`thumb-${lesson.id}`}
-               src={`https://img.youtube.com/vi/${extractYouTubeId(lesson.video_url)}/hqdefault.jpg`}
+               src={`https://img.youtube.com/vi/${getYouTubeId(lesson.video_url)}/hqdefault.jpg`}
 
               alt={`${lesson.title} thumbnail`}
 
@@ -105,7 +106,7 @@ function extractYouTubeId(url) {
   )}
 
 
-      {/* Notes */}
+  
       <div className="bg-white p-6 rounded-xl shadow">
         <h2 className="text-xl font-semibold mb-3">Lesson Notes</h2>
 
@@ -117,3 +118,5 @@ function extractYouTubeId(url) {
     </div>
   );
 }
+
+export default LessonDetail;

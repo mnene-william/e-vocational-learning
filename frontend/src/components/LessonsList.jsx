@@ -33,11 +33,12 @@ function LessonsList() {
 
             
             <div className="h-40 bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center">
-              <span className="text-white text-5xl"></span>
+               im
             </div>
 
             
             <div className="p-4">
+                
               <h2 className="text-lg font-semibold text-gray-800 mb-1">
                 {lesson.title}
               </h2>

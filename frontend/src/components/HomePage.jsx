@@ -11,18 +11,25 @@ export default function HomePage() {
 
 
   useEffect(() => {
-    api.get("/skills/").then((res) => {
-      setSkills(res.data);
-    }).catch((err) => console.error("Error fetching skills:", err));
+
+    api.get("/skills/").then((response) => {
+      setSkills(response.data);
+
+    })
+    .catch((err) => console.error("An error occured when fetching the skills:", err));
+
   }, []);
 
 
 
   useEffect(() => {
-    
-    api.get("/lessons/").then((res) => {
-      setLessons(res.data);
-    }).catch((err) => console.error("Error fetching lessons:", err));
+
+    api.get("/lessons/").then((response) => {
+      setLessons(response.data);
+
+    })
+    .catch((err) => console.error("An error occured when fetching the lessons:", err));
+
   }, []);
 
   return (
@@ -52,7 +59,7 @@ export default function HomePage() {
 
           <div className="flex flex-col sm:flex-row gap-4 mt-4">
 
-            <button className="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold transition transform hover:scale-105">
+            <button onClick={() => navigate("/lessons")} className="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold transition transform hover:scale-105">
               Get Started
             </button>
 
