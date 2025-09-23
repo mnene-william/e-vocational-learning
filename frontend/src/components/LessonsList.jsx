@@ -34,7 +34,7 @@ function LessonsList() {
             
             <div className="h-48 w-full overflow-hidden rounded-t-2xl">
 
-              <img src={lesson.placeholder_image ? lesson.placeholder_image : "https://via.placeholder.com/400x250?text=Lesson"} alt={lesson.title} className="w-full h-full object-cover transform hover:scale-105 transition duration-300"/>
+              <img src={lesson.placeholder_image || "https://via.placeholder.com/400x250?text=No+Image"} alt={lesson.title} className="w-full h-full object-cover transform hover:scale-105 transition duration-300"/>
             </div>
 
             

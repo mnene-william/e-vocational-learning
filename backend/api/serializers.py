@@ -25,10 +25,20 @@ class LessonSerializer(serializers.ModelSerializer):
         queryset=Skill.objects.all(), source="category", write_only=True
     )
 
+    placeholder_image = serializers.SerializerMethodField()
+
     class Meta:
         model = Lesson
 
         fields = ["id", "title", "content", "video", "video_url", "created_at", "category", "category_id", "placeholder_image"]
+
+    def get_placeholder_image(self, object):
+        if object.placeholder_image:
+            return object.placeholder_image.url
+            
+        else:
+            return None
+
 
 class QuizQuestionSerializer(serializers.ModelSerializer):
     class Meta:

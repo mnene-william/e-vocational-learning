@@ -109,11 +109,15 @@ export default function HomePage() {
                 className="bg-gray-100 rounded-xl shadow-lg overflow-hidden transform transition hover:shadow-2xl hover:-translate-y-1"
               >
                
-                <img
-                  src={`https://via.placeholder.com/400x250?text=${lesson.placeholder_image}`}
-                  alt={lesson.title}
-                  className="rounded-t-xl w-full h-48 object-cover"
-                />
+                <div className="w-full aspect-[16/9] rounded-t-xl overflow-hidden">
+                      <img
+
+                      src={lesson.placeholder_image || "https://via.placeholder.com/400x250?text=No+Image"}
+                      alt={lesson.title}
+                      className="w-full h-full object-cover"
+                  />
+                </div>
+                
                 <div className="p-6">
 
                   <h3 className="font-bold text-xl mb-2">{lesson.title}</h3>
