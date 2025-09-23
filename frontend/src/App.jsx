@@ -10,6 +10,7 @@ import HomePage from './components/HomePage';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ForgotPassword from './components/ForgotPassword';
+import ResetPassword from './components/ResetPassword';
 
 
 import './App.css'
@@ -32,6 +33,8 @@ function App() {
           <Route path="/home" element={<HomePage />} />
 
           <Route path="/forgot-password" element={<ForgotPassword />} />
+
+          <Route path="/reset-password" element={<ResetPassword />}
 
       
 
