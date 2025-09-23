@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from cloudinary.models import CloudinaryField
 
 User = get_user_model()
 
@@ -18,7 +19,7 @@ class Lesson(models.Model):
     content = models.TextField(blank=True)
     video = models.FileField(upload_to='lessons/videos/', blank=True, null=True)
     video_url =models.URLField(blank=True, null=True)
-    placeholder_image = models.ImageField(upload_to="lesson_images")
+    placeholder_image = CloudinaryField('Capstone', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
