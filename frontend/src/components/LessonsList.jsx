@@ -33,7 +33,7 @@ function LessonsList() {
 
             
             <div className="h-40 bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center">
-               im
+              <span className="text-white text-5xl"></span>
             </div>
 
             
