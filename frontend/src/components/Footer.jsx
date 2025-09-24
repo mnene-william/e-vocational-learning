@@ -35,7 +35,7 @@ function Footer(){
 
                             <li><a href="#">Profile</a></li> 
 
-                            <li><a href="#">Contact</a></li> 
+                            <li><a href="/contact">Contact</a></li> 
 
                             <li><a href="#">Home</a></li> 
 
@@ -75,7 +75,7 @@ function Footer(){
                 <div className="mt-8 border-t border-gray-700 pt-6 text-center text-sm">
 
                     <p>&copy; 2025 E-Vocational Learning . All rights reserved.</p>
-                    
+
                 </div>
 
             </div>

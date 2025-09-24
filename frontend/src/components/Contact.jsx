@@ -2,6 +2,8 @@ import React from 'react'
 import { useState } from 'react';
 import { FaMapMarkedAlt, FaPhoneAlt, FaEnvelope } from 'react-icons/fa';
 import api from '../api';
+import Navbar from './Navbar';
+import Footer from './Footer';
 
 function Contact(){
 
@@ -46,6 +48,7 @@ function Contact(){
 
    return(
       <>
+      <Navbar />
 
       <div className="min-h-screen bg-gray-50 text-gray-800">
 
@@ -134,6 +137,8 @@ function Contact(){
 
 
       </div>
+
+      <Footer/>
       
       
       </>
