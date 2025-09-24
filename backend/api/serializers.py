@@ -59,4 +59,10 @@ class ReviewSerializer(serializers.ModelSerializer):
         model = Review
         fields = "__all__"
 
+class ContactMessageSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ContactMessage
+        fields = "__all__"
+
         

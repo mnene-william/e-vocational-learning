@@ -60,6 +60,16 @@ class Review(models.Model):
         return f"{self.user.username} review for {self.lesson.title}"
     
 
+class ContactMessage(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.name} - {self.message}"
+    
+
     
 
 
