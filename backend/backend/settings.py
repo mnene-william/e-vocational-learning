@@ -125,6 +125,11 @@ DATABASES = {
     } 
 }
 
+# For development only: prints emails to the console
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+
 
 JAZZMIN_SETTINGS = {
     "site_title": "SkillLearn Admin",

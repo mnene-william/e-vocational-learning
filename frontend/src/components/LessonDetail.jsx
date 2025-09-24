@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../api";
+import Navbar from "./Navbar";
 
 function LessonDetail() {
   const { id } = useParams();
@@ -60,6 +61,7 @@ function getYouTubeId(url) {
 
 
   return (
+    <>
     <div className="px-6 py-8 max-w-4xl mx-auto">
 
       <h1 className="text-3xl font-bold text-gray-900 mb-2">
@@ -116,7 +118,7 @@ function getYouTubeId(url) {
 
       </div>
     </div>
-  );
+  </>);
 }
 
 export default LessonDetail;

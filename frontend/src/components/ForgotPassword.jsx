@@ -21,7 +21,7 @@ function ForgotPassword(){
     
 
     try{
-        await api.post("/auth/password-reset/", {email})
+        await api.post("/password_reset/", {email})
 
         setSuccessMsg("A password reset link has been sent!")
 

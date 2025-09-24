@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api";
+import Navbar from "./Navbar";
 
 function LessonsList() {
   const [lessons, setLessons] = useState([]);
@@ -16,6 +17,9 @@ function LessonsList() {
   }, []);
 
   return (
+    <>
+    
+    <Navbar />
     <div className="px-6 py-8">
       <h1 className="text-2xl font-bold mb-6 text-gray-800">Available Lessons</h1>
       
@@ -53,7 +57,7 @@ function LessonsList() {
         ))}
       </div>
     </div>
-  );
+  </>);
 }
 export default LessonsList;
 

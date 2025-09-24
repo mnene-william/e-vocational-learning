@@ -12,10 +12,10 @@ function ResetPassword(){
 
 
      const navigate = useNavigate()
+     const [searchParams] = useSearchParams()
 
-
-     const token = useSearchParams.get("token")
-     const uid = useSearchParams.get("uid")
+     const token = searchParams.get("token")
+     const uid = searchParams.get("uid")
 
 
      const handleResetPassword = async (e) => {
@@ -29,19 +29,26 @@ function ResetPassword(){
 
         try{
             
-            await api.post("/password_reset/confirm", {token, uid, password, password_confirm: confirmPassword})
+            await api.post("/password_reset/confirm/", {token, uid, new_password: password, re_new_password: confirmPassword})
 
             setSuccessMsg("Your password was reset successfully!")
 
-            setTimeout(() => navigate("/login", 2000))
+            setTimeout(() => navigate("/login"), 2000)
         }
-        catch(error){
+        catch(err){
+            if (err.response && err.response.data?.email) {
 
-            console.error("Password reset failed:", err)
+               setErrorMsg(err.response.data.email[0])
 
-            setErrorMsg("Password reset failed. Please try again")
+            }
+
+             else{
+
+                setErrorMsg("Something went wrong. Please try again.")
+            }
+}
         }
-     }
+     
 
 
 
@@ -50,11 +57,13 @@ return(
 
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
 
-      <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
+      <form onSubmit={handleResetPassword} className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
 
           <h2 className="text-2xl font-bold mb-4">Reset Password</h2>
 
-              {message && <p className="mb-4 text-red-600">{message}</p>}
+              {errorMsg && <p className="mb-4 text-red-600">{errorMsg}</p>}
+
+              {successMsg && <p className="mb-4 text-green-600">{successMsg}</p>}
 
         <input
 

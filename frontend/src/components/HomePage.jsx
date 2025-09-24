@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 import api from "../api";
+import Footer from "./Footer";
 
 export default function HomePage() {
   const [skills, setSkills] = useState([]);
@@ -117,7 +118,7 @@ export default function HomePage() {
                       className="w-full h-full object-cover"
                   />
                 </div>
-                
+
                 <div className="p-6">
 
                   <h3 className="font-bold text-xl mb-2">{lesson.title}</h3>
@@ -139,6 +140,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      <Footer />
     </>
   );
 }
