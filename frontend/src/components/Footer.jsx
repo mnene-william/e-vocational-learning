@@ -1,5 +1,5 @@
 import React from "react";
-import {FaGithub, FaTwitter, FaLinkedin} from "react-icons/fa"
+import {FaGithub, FaInstagram, FaLinkedin} from "react-icons/fa"
 
 function Footer(){
 
@@ -43,6 +43,39 @@ function Footer(){
 
                     </div>
 
+                    <div>
+
+                        <h3 className="text-sm font-semibold text-white uppercase ">Connect with us</h3>
+
+                        <div className="flex mt-4 space-x-4">
+                            <a href="https://github.com"> 
+
+                              <FaGithub className="h-6 w-6 hover:text-white" />
+                            
+                            </a>
+
+                            <a href="https://instagram.com" >
+
+                                <FaInstagram className="h-6 w-6 hover:text-white" />
+                             
+                            </a> 
+
+                            <a href="https://linkedin.com">
+
+                                <FaLinkedin className="h-6 w-6 hover:text-white" />
+                            </a>
+
+                            
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div className="mt-8 border-t border-gray-700 pt-6 text-center text-sm">
+
+                    <p>&copy; 2025 E-Vocational Learning . All rights reserved.</p>
+                    
                 </div>
 
             </div>
