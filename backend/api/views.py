@@ -56,9 +56,9 @@ class ReviewViewSet(viewsets.ModelViewSet):
 class ContactMessageCreateView(viewsets.ModelViewSet):
     queryset = ContactMessage.objects.all()
     serializer_class = ContactMessageSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.AllowAny]
 
-    http_method_names = ['post']
+    http_method_names = ['post', 'get']
 
 
 
