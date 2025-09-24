@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState } from 'react';
 import { FaMapMarkedAlt, FaPhoneAlt, FaEnvelope } from 'react-icons/fa';
+import api from '../api';
 
 function Contact(){
 
