@@ -38,6 +38,19 @@ function Login() {
         transition={{ type: "spring", duration: 1 }}
         className="relative z-10 w-full max-w-md rounded-2xl bg-white/90 p-8 shadow-2xl backdrop-blur-lg"
       >
+
+
+
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => navigate("/home")} // Go back to previous page
+          className="mb-4 text-sm text-indigo-600 hover:underline"
+        >
+          ← Back
+        </motion.button>
+
+
         <motion.h2
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
