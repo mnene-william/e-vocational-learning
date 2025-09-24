@@ -7,10 +7,9 @@ import UserProgress from './components/UserProgess';
 import Login from './components/login';
 import SignUp from './components/SignUp';
 import HomePage from './components/HomePage';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
 import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
+import Contact from './components/Contact';
 
 
 import './App.css'
@@ -43,6 +42,8 @@ function App() {
           <Route path="/lessons/:id" element={<ProtectedRoute><LessonDetail /></ProtectedRoute>} />
 
           <Route path="/userprogress" element={<ProtectedRoute><UserProgress /></ProtectedRoute>} />
+
+          <Route path="/contact" element={<Contact />} />
 
           
 
