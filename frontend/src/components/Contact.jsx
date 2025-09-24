@@ -67,7 +67,7 @@ function Contact(){
 
                 <h2 className="text-2xl font-bold mb-6">Send Us a message</h2>
 
-                <form className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-4">
 
                     {successMsg && (
                         <p className="mb-4 p-3 bg-green-100 text-green-700 rounded">{successMsg}</p>
