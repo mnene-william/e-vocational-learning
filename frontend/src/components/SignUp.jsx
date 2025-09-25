@@ -40,6 +40,7 @@ function SignUp() {
   };
 
   return (
+    
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-indigo-500 to-purple-600">
       <motion.div
         initial={{ opacity: 0, y: 40 }}

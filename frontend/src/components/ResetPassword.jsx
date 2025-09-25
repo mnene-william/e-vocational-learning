@@ -22,6 +22,7 @@ function ResetPassword(){
         e.preventDefault()
 
         if(password !== confirmPassword){
+          
             setErrorMsg("The passwords you entered do not match.")
 
             return;
