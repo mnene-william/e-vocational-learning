@@ -1,8 +1,11 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
-from rest_framework import generics, viewsets, permissions
-from rest_framework.permissions import AllowAny
+from rest_framework import generics, viewsets, permissions, filters
+from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 from .serializers import *
+from rest_framework.response import Response
+from  .models import Skill, Lesson, UserProfile
+from rest_framework.decorators import api_view, permission_classes
 
 
 # Create your views here.
@@ -70,6 +73,22 @@ class UserProfileViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         return UserProfile.objects.filter(user=self.request.user)
     
+
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticatedOrReadOnly])
+
+def search(request):
+    query = request.GET.get("q", "")
+    skills = Skill.objects.filter(title__icontains=query)
+    lessons = Lesson.objects.filter(title__icontains=query)
+
+    return Response({
+        
+        "skills": SkillSerializer(skills, many=True).data,
+        "lessons": LessonSerializer(lessons, many=True).data,
+    })
 
 
 
