@@ -70,6 +70,25 @@ class ContactMessage(models.Model):
         return f"{self.name} - {self.message}"
     
 
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
+    bio = models.TextField(blank=True, null=True)
+    profile_picture = models.ImageField(upload_to="profiles/", blank=True, null=True)
+    
+    def __str__ (self):
+        return self.user.username
+    
+
+class LessonProgress(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="progress")
+    lesson = models.ForeignKey("Lesson", on_delete=models.CASCADE)
+    completed = models.BooleanField(default=False)
+    progress_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=0.0)
+    last_opened = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.lesson.title} ({self.progress_percentage})"
+
     
 
 
