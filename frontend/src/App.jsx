@@ -10,6 +10,7 @@ import HomePage from './components/HomePage';
 import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
 import Contact from './components/Contact';
+import UserProfile from './components/UserProfile';
 
 
 import './App.css'
@@ -44,6 +45,8 @@ function App() {
           <Route path="/userprogress" element={<ProtectedRoute><UserProgress /></ProtectedRoute>} />
 
           <Route path="/contact" element={<Contact />} />
+
+          <Route path="/profile" element={<ProtectedRoute><UserProfile/></ProtectedRoute>}
 
           
 
