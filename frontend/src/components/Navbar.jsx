@@ -1,87 +1,209 @@
 import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
 
-function UserProfile() {
-  const [profile, setProfile] = useState(null);
-  const [errorMsg, setErrorMsg] = useState("");
+function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const [auth, setAuth] = useState({
+
+    token: localStorage.getItem("access") || localStorage.getItem("ACCESS_TOKEN"),
+    username: localStorage.getItem("username") || localStorage.getItem("USERNAME"),
+  });
+
+  const [query, setQuery] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+  const navigate = useNavigate();
+
+  const isAuthenticated = !!auth.token;
 
   useEffect(() => {
-    api
-      .get("/profile/")
-      .then((response) => {
-        setProfile(response.data[0]);
-      })
-      .catch(() =>
-        setErrorMsg("Failed to load your profile. Please try again later.")
-      );
+
+    const onAuthChange = () => {
+
+      setAuth({
+        token: localStorage.getItem("access") || localStorage.getItem("ACCESS_TOKEN"),
+        username: localStorage.getItem("username") || localStorage.getItem("USERNAME"),
+      });
+    };
+
+    window.addEventListener("authChange", onAuthChange);
+
+    return () => window.removeEventListener("authChange", onAuthChange);
   }, []);
 
-  const getAvatarUrl = (username) => {
-    return profile?.profile_picture
-      ? profile.profile_picture
-      : `https://robohash.org/${username}.png?size=150x150`;
+  const handleLogout = () => {
+    
+    localStorage.removeItem("access");
+    localStorage.removeItem("ACCESS_TOKEN");
+    localStorage.removeItem("username");
+    localStorage.removeItem("USERNAME");
+    window.dispatchEvent(new Event("authChange"));
+    navigate("/login");
+  };
+
+  const handleSearchChange = async (e) => {
+    const value = e.target.value;
+    setQuery(value);
+
+    if (!value) {
+      setSuggestions([]);
+      return;
+    }
+
+    try {
+      // Example: search endpoint that searches both skills and lessons
+      const res = await api.get(`/search/?q=${encodeURIComponent(value)}`);
+      setSuggestions(res.data); // assume backend returns [{id, type, title}]
+    } catch (err) {
+      console.error("Search error:", err);
+      setSuggestions([]);
+    }
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (query) {
+      navigate(`/search?q=${encodeURIComponent(query)}`);
+      setSuggestions([]);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50 py-10">
-      <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg p-8">
-        <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-          My Profile
-        </h1>
+    <header className="fixed top-0 left-0 right-0 z-20 bg-white/10 backdrop-blur-lg border-b border-white/20 shadow-md">
+      <nav className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+        <Link
+          to="/"
+          className="text-xl font-extrabold bg-gradient-to-r from-indigo-400 to-pink-500 bg-clip-text text-transparent"
+        >
+          E-vocational Learning
+        </Link>
 
-        {errorMsg && (
-          <p className="text-red-600 text-center mb-4">{errorMsg}</p>
-        )}
+        {/* Desktop menu */}
+        <div className="hidden md:flex items-center space-x-6">
+          <Link to="/" className="text-white hover:text-pink-400 transition">
+            Home
+          </Link>
+          <Link to="/lessons" className="text-white hover:text-pink-400 transition">
+            Explore
+          </Link>
 
-        {profile && (
-          <div className="flex flex-col items-center">
-            <img
-              src={getAvatarUrl(profile.username)}
-              alt="Profile"
-              className="w-32 h-32 rounded-full border-4 border-indigo-300 mb-4 shadow-md"
+          {!isAuthenticated ? (
+            <>
+              <Link to="/login" className="text-white hover:text-pink-400 transition">
+                Login
+              </Link>
+              <Link to="/signup" className="text-white hover:text-pink-400 transition">
+                Sign Up
+              </Link>
+            </>
+          ) : (
+            <button onClick={handleLogout} className="text-white hover:text-red-400 transition">
+              Logout
+            </button>
+          )}
+        </div>
+
+        {/* Search input */}
+        <div className="relative hidden md:flex items-center ml-6">
+          <form onSubmit={handleSearchSubmit}>
+            <input
+              type="text"
+              placeholder="Search skills or lessons..."
+              value={query}
+              onChange={handleSearchChange}
+              className="bg-white/20 text-white placeholder-white/70 px-3 py-1 rounded-full outline-none w-64 focus:ring-2 focus:ring-indigo-400 transition"
             />
-            <h2 className="text-xl font-semibold text-gray-700">
-              {profile.username}
-            </h2>
-            <p className="text-gray-500 mb-4">{profile.email}</p>
-            {profile.bio && (
-              <p className="text-center text-gray-600 mb-6 px-4">{profile.bio}</p>
-            )}
+          </form>
+          {suggestions.length > 0 && (
+            <div className="absolute top-10 w-64 bg-white rounded-md shadow-lg max-h-60 overflow-y-auto z-50">
+              {suggestions.map((item) => (
+                <div
+                  key={item.id}
+                  className="px-4 py-2 hover:bg-indigo-100 cursor-pointer"
+                  onClick={() => navigate(`/${item.type}/${item.id}`)}
+                >
+                  {item.title} <span className="text-gray-500 text-sm">({item.type})</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
 
-            <h3 className="text-2xl font-semibold text-gray-800 mt-6 mb-3">
-              My Progress
-            </h3>
-            {profile.progress.length > 0 ? (
-              <ul className="w-full max-w-md space-y-2">
-                {profile.progress.map((p) => (
-                  <li
-                    key={p.id}
-                    className={`flex justify-between items-center px-4 py-2 rounded shadow-sm ${
-                      p.completed ? "bg-green-100" : "bg-red-100"
-                    }`}
-                  >
-                    <span className="font-medium">{p.lesson_title}</span>
-                    <span
-                      className={`font-semibold ${
-                        p.completed ? "text-green-700" : "text-red-700"
-                      }`}
-                    >
-                      {p.progress_percentage}% {p.completed ? "✅" : "❌"}
-                    </span>
-                  </li>
-                ))}
-              </ul>
+        {/* Profile & mobile */}
+        <div className="flex items-center gap-4 ml-auto">
+          {isAuthenticated && (
+            <div className="flex items-center gap-2">
+              <div className="w-9 h-9 rounded-full flex items-center justify-center bg-gradient-to-r from-indigo-400 to-pink-500 shadow-md">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="white"
+                  viewBox="0 0 24 24"
+                  className="w-6 h-6"
+                >
+                  <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z" />
+                </svg>
+              </div>
+              <span className="text-white font-medium">{auth.username}</span>
+            </div>
+          )}
+
+          <button
+            className="text-white md:hidden"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            {isOpen ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-7 h-7"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
             ) : (
-              <p className="text-gray-500 mt-2">No progress yet.</p>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-7 h-7"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            )}
+          </button>
+        </div>
+      </nav>
+
+      {/* Mobile menu */}
+      {isOpen && (
+        <div className="md:hidden bg-white/10 backdrop-blur-lg border-t border-white/20 shadow-md">
+          <div className="flex flex-col items-center py-4 space-y-3">
+            <Link to="/" className="text-white hover:text-pink-400 transition">Home</Link>
+            <Link to="/lessons" className="text-white hover:text-pink-400 transition">Explore</Link>
+            {!isAuthenticated ? (
+              <>
+                <Link to="/login" className="text-white hover:text-pink-400 transition">Login</Link>
+                <Link to="/signup" className="text-white hover:text-pink-400 transition">Sign Up</Link>
+              </>
+            ) : (
+              <>
+                <button onClick={handleLogout} className="text-white hover:text-red-400 transition">Logout</button>
+                <span className="text-white font-medium">{auth.username}</span>
+              </>
             )}
           </div>
-        )}
-      </div>
-    </div>
+        </div>
+      )}
+    </header>
   );
 }
 
-export default UserProfile;
+export default Navbar;
 
 
 
