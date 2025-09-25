@@ -12,6 +12,7 @@ router.register(r"questions", QuizQuestionViewSet, basename="question")
 router.register(r"progress", UserProgressViewSet, basename="progress")
 router.register("reviews", ReviewViewSet, basename="review")
 router.register("contact", ContactMessageCreateView, basename="contact")
+router.register(r"profile", UserProfileView, basename="profile")
 
 urlpatterns = [
     path("user/register/", CreateUserView.as_view(), name="register"),
