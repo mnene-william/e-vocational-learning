@@ -46,7 +46,7 @@ function App() {
 
           <Route path="/contact" element={<Contact />} />
 
-          <Route path="/profile" element={<ProtectedRoute><UserProfile/></ProtectedRoute>}
+          <Route path="/profile" element={<ProtectedRoute><UserProfile/></ProtectedRoute>} />
 
           
 
