@@ -52,8 +52,18 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
 
     
+    def get_queryset(self):
+        """
+        Allow filtering reviews by lesson ID with ?lesson=<id>
+        Example: /api/reviews/?lesson=5
+        """
+        lesson_id = self.request.query_params.get("lesson")
+        if lesson_id:
+            return Review.objects.filter(lesson_id=lesson_id)
+        return super().get_queryset()
+
     def perform_create(self, serializer):
-        # This automatically sets the user from the request
+        # Automatically set the user to the logged-in user
         serializer.save(user=self.request.user)
 
 
@@ -105,3 +115,6 @@ def search(request):
         "skill": None,
         "lessons": serializer.data
     })
+
+
+

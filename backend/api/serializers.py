@@ -18,6 +18,15 @@ class SkillSerializer(serializers.ModelSerializer):
         model = Skill
         fields = "__all__"
 
+
+class ReviewSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+
+    class Meta:
+        model = Review
+        fields = "__all__"
+
+
 class LessonSerializer(serializers.ModelSerializer):
     category = SkillSerializer(read_only=True)
     category_id = serializers.PrimaryKeyRelatedField(
@@ -27,10 +36,14 @@ class LessonSerializer(serializers.ModelSerializer):
 
     placeholder_image = serializers.SerializerMethodField()
 
+    reviews = ReviewSerializer(many=True, read_only=true)
+
+    average_rating = serializers.SerializerMethodField()
+
     class Meta:
         model = Lesson
 
-        fields = ["id", "title", "content", "video", "video_url", "created_at", "category", "category_id", "placeholder_image"]
+        fields = ["id", "title", "content", "video", "video_url", "created_at", "category", "category_id", "placeholder_image", "reviews", "average_rating"]
 
     def get_placeholder_image(self, object):
         if object.placeholder_image:
@@ -38,6 +51,15 @@ class LessonSerializer(serializers.ModelSerializer):
             
         else:
             return None
+        
+    def get_average_rating(self, object):
+        reviews = object.reviews.all()
+
+        if reviews.exists():
+            return  round(sum(r.rating for r in reviews) / reviews.count(), 2)
+        
+        return None
+
 
 
 class QuizQuestionSerializer(serializers.ModelSerializer):
@@ -50,13 +72,6 @@ class UserProgressSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserProgress
-        fields = "__all__"
-
-class ReviewSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
-
-    class Meta:
-        model = Review
         fields = "__all__"
 
 class ContactMessageSerializer(serializers.ModelSerializer):
