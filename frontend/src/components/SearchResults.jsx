@@ -1,88 +1,81 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import api from "../api";
 
-function useQuery() {
-  return new URLSearchParams(useLocation().search);
-}
-
-function SearchResults() {
-  const query = useQuery().get("q") || "";
-  const [skills, setSkills] = useState([]);
+export default function SearchResults() {
   const [lessons, setLessons] = useState([]);
+  const [skill, setSkill] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  const query = new URLSearchParams(location.search).get("q") || "";
 
   useEffect(() => {
-    const fetchResults = async () => {
-      setLoading(true);
-      try {
-        const res = await api.get(`/search/?q=${query}`);
-        setSkills(res.data.skills);
-        setLessons(res.data.lessons);
-        setError("");
-      } catch (err) {
-        console.error(err);
-        setError("Failed to fetch search results.");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchResults();
+    if (!query) return;
+
+    setLoading(true);
+    api
+      .get(`/search/?q=${query}`)
+      .then((res) => {
+        setLessons(res.data.lessons || []);
+        setSkill(res.data.skill || null);
+      })
+      .catch((err) => {
+        console.error("Search error:", err);
+      })
+      .finally(() => setLoading(false));
   }, [query]);
 
-  if (loading) return <p className="text-center mt-10">Loading...</p>;
-  if (error) return <p className="text-center mt-10 text-red-600">{error}</p>;
+  if (loading) {
+    return <p className="text-center mt-20">Loading results...</p>;
+  }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-10">
-      <h1 className="text-3xl font-bold mb-6">Search Results for "{query}"</h1>
+    <div className="container mx-auto px-6 py-12">
+      <h2 className="text-3xl font-bold text-center mb-12">
+        {skill
+          ? `Lessons for ${skill}`
+          : lessons.length > 0
+          ? `Search results for "${query}"`
+          : `No lessons found for "${query}"`}
+      </h2>
 
-      {skills.length > 0 && (
-        <>
-          <h2 className="text-2xl font-semibold mb-4">Skills</h2>
-          <div className="grid md:grid-cols-3 gap-6 mb-10">
-            {skills.map((skill) => (
-              <div
-                key={skill.id}
-                className="bg-white shadow-md rounded-xl p-5 hover:shadow-xl transition relative"
+      <div className="grid gap-8 md:grid-cols-3">
+        {lessons.map((lesson) => (
+          <div
+            key={lesson.id}
+            className="bg-gray-100 rounded-xl shadow-lg overflow-hidden transform transition hover:shadow-2xl hover:-translate-y-1"
+          >
+            {/* Thumbnail */}
+            <div className="w-full aspect-[16/9] rounded-t-xl overflow-hidden">
+              <img
+                src={
+                  lesson.placeholder_image ||
+                  "https://via.placeholder.com/400x250?text=No+Image"
+                }
+                alt={lesson.title}
+                className="w-full h-full object-cover"
+              />
+            </div>
+
+            {/* Content */}
+            <div className="p-6">
+              <h3 className="font-bold text-xl mb-2">{lesson.title}</h3>
+              <p className="text-gray-600 mb-4">
+                Category: {lesson.category?.name || "Uncategorized"}
+              </p>
+              <button
+                onClick={() => navigate(`/lessons/${lesson.id}`)}
+                className="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold transition"
               >
-                <div className="h-32 w-full bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
-                  <span className="text-indigo-500 font-bold text-xl">{skill.title[0]}</span>
-                </div>
-                <h3 className="text-xl font-semibold mb-2">{skill.title}</h3>
-                <p className="text-gray-600">{skill.description || "No description available."}</p>
-              </div>
-            ))}
+                Start Learning
+              </button>
+            </div>
           </div>
-        </>
-      )}
-
-      {lessons.length > 0 && (
-        <>
-          <h2 className="text-2xl font-semibold mb-4">Lessons</h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            {lessons.map((lesson) => (
-              <div
-                key={lesson.id}
-                className="bg-white shadow-md rounded-xl p-5 hover:shadow-xl transition relative"
-              >
-                <div className="h-32 w-full bg-green-100 rounded-lg flex items-center justify-center mb-4">
-                  <span className="text-green-500 font-bold text-xl">{lesson.title[0]}</span>
-                </div>
-                <h3 className="text-xl font-semibold mb-2">{lesson.title}</h3>
-                <p className="text-gray-600">{lesson.description || "No description available."}</p>
-              </div>
-            ))}
-          </div>
-        </>
-      )}
-
-      {skills.length === 0 && lessons.length === 0 && (
-        <p className="text-center mt-10 text-gray-500">No results found for "{query}".</p>
-      )}
+        ))}
+      </div>
     </div>
   );
 }
 
-export default SearchResults;

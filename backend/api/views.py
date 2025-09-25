@@ -6,6 +6,7 @@ from .serializers import *
 from rest_framework.response import Response
 from  .models import Skill, Lesson, UserProfile
 from rest_framework.decorators import api_view, permission_classes
+from django.db.models import Q
 
 
 # Create your views here.
@@ -18,13 +19,13 @@ class CreateUserView(generics.CreateAPIView):
 class SkillViewSet(viewsets.ModelViewSet):
     queryset = Skill.objects.all()
     serializer_class = SkillSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [AllowAny]
 
 
 class LessonViewSet(viewsets.ModelViewSet):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [AllowAny]
 
 
 class QuizQuestionViewSet(viewsets.ModelViewSet):
@@ -59,7 +60,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
 class ContactMessageCreateView(viewsets.ModelViewSet):
     queryset = ContactMessage.objects.all()
     serializer_class = ContactMessageSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [AllowAny]
 
     http_method_names = ['post', 'get']
 
@@ -77,21 +78,30 @@ class UserProfileViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticatedOrReadOnly])
-
+@permission_classes([AllowAny])
 def search(request):
-    query = request.GET.get("q", "")
-    skills = Skill.objects.filter(name__icontains=query)
-    lessons = Lesson.objects.filter(title__icontains=query)
+    query = request.GET.get("q", "").strip()
 
+    if not query:
+        return Response({"skill": None, "lessons": []})
+
+    # First: check if query matches a Skill
+    matching_skills = Skill.objects.filter(name__icontains=query)
+    if matching_skills.exists():
+        lessons = Lesson.objects.filter(category__in=matching_skills)
+        serializer = LessonSerializer(lessons.distinct(), many=True)
+        return Response({
+            "skill": matching_skills.first().name,
+            "lessons": serializer.data
+        })
+
+    # Otherwise: search Lessons directly
+    lessons = Lesson.objects.filter(
+        Q(title__icontains=query) | Q(content__icontains=query)
+    )
+
+    serializer = LessonSerializer(lessons.distinct(), many=True)
     return Response({
-
-        "skills": SkillSerializer(skills, many=True).data,
-        "lessons": LessonSerializer(lessons, many=True).data,
+        "skill": None,
+        "lessons": serializer.data
     })
-
-
-
-
-
-
