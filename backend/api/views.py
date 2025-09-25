@@ -62,7 +62,7 @@ class ContactMessageCreateView(viewsets.ModelViewSet):
 
 
 
-class UserProfileView(viewsets.ModelViewSet):
+class UserProfileViewSet(viewsets.ModelViewSet):
 
     serializer_class = UserProfileSerializer
     permission_classes = [permissions.IsAuthenticated]
