@@ -81,11 +81,11 @@ class UserProfileViewSet(viewsets.ReadOnlyModelViewSet):
 
 def search(request):
     query = request.GET.get("q", "")
-    skills = Skill.objects.filter(title__icontains=query)
+    skills = Skill.objects.filter(name__icontains=query)
     lessons = Lesson.objects.filter(title__icontains=query)
 
     return Response({
-        
+
         "skills": SkillSerializer(skills, many=True).data,
         "lessons": LessonSerializer(lessons, many=True).data,
     })
