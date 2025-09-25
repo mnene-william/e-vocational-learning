@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import api from "../api";
 
 function UserProfile() {
@@ -8,50 +9,72 @@ function UserProfile() {
   useEffect(() => {
     api
       .get("/profile/")
-      .then((response) => {
-        if (response.data.length > 0) {
-          setProfile(response.data[0]);
-        } else {
-          setErrorMsg("No profile data found.");
-        }
-      })
+      .then((response) => setProfile(response.data[0]))
       .catch(() =>
-        setErrorMsg("Failed to load your profile. Please try again.")
+        setErrorMsg("Failed to load your profile. Please try again later.")
       );
   }, []);
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">My Profile</h1>
-
-      {errorMsg && <p className="mb-4 text-red-600">{errorMsg}</p>}
+    <div className="max-w-4xl mx-auto p-6">
+      {errorMsg && (
+        <p className="mb-4 text-red-600 font-medium text-center">{errorMsg}</p>
+      )}
 
       {profile && (
         <>
-          <img
-            src={profile.profile_picture || "https://via.placeholder.com/150"}
-            alt="Profile"
-            className="w-32 h-32 rounded-full mb-4"
-          />
-
-          <div className="mb-4">
-            <h2 className="font-semibold">Bio</h2>
-            <p>{profile.bio || "No bio available."}</p>
+          {/* Profile Header */}
+          <div className="flex flex-col md:flex-row items-center md:items-start gap-6 bg-white shadow rounded-lg p-6 mb-8">
+            <img
+              src={
+                profile.profile_picture ||
+                `https://avatars.dicebear.com/api/initials/${profile.username}.svg`
+              }
+              alt="Profile"
+              className="w-32 h-32 rounded-full border-2 border-indigo-500"
+            />
+            <div className="flex-1">
+              <h1 className="text-3xl font-bold">{profile.username}</h1>
+              <p className="text-gray-600">{profile.email}</p>
+              {profile.bio && (
+                <p className="mt-2 text-gray-800">{profile.bio}</p>
+              )}
+            </div>
           </div>
 
-          <h2 className="text-xl font-semibold mt-8">My Progress</h2>
-          <ul className="list-disc ml-6 mt-2">
-            {profile.progress?.length > 0 ? (
-              profile.progress.map((p) => (
-                <li key={p.id}>
-                  {p.lesson_title} - {p.progress_percentage}%{" "}
-                  {p.completed ? "✅" : "❌"}
-                </li>
-              ))
-            ) : (
-              <li>No progress yet.</li>
-            )}
-          </ul>
+          {/* Progress Cards */}
+          <h2 className="text-2xl font-semibold mb-4">My Progress</h2>
+          {profile.progress.length === 0 && (
+            <p className="text-gray-500">No progress yet.</p>
+          )}
+          <div className="grid md:grid-cols-2 gap-6">
+            {profile.progress.map((p) => (
+              <div
+                key={p.lesson}
+                className="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow"
+              >
+                <div className="flex justify-between items-center mb-2">
+                  <h3 className="font-medium text-gray-800">{p.lesson_title}</h3>
+                  <span className="text-sm text-gray-600">
+                    {p.progress_percentage}%
+                  </span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: `${p.progress_percentage}%` }}
+                    transition={{ duration: 1.2, ease: "easeOut" }}
+                    className={`h-4 rounded-full ${
+                      p.completed ? "bg-green-500" : "bg-indigo-500"
+                    }`}
+                  ></motion.div>
+                </div>
+                {p.completed && (
+                  <p className="mt-2 text-green-600 font-semibold">Completed ✅</p>
+                )}
+              </div>
+            ))}
+          </div>
         </>
       )}
     </div>
@@ -59,4 +82,9 @@ function UserProfile() {
 }
 
 export default UserProfile;
+
+
+
+
+
 
