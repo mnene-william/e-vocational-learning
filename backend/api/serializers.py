@@ -36,14 +36,14 @@ class LessonSerializer(serializers.ModelSerializer):
 
     placeholder_image = serializers.SerializerMethodField()
 
-    reviews = ReviewSerializer(many=True, read_only=true)
+    reviews = ReviewSerializer(many=True, read_only=True)
 
     average_rating = serializers.SerializerMethodField()
 
     class Meta:
         model = Lesson
 
-        fields = ["id", "title", "content", "video", "video_url", "created_at", "category", "category_id", "placeholder_image", "reviews", "average_rating"]
+        fields = ["id", "title", "content", "video", "video_url", "created_at", "category", "category_id", "placeholder_image", "reviews", "average_rating", "reviews_count"]
 
     def get_placeholder_image(self, object):
         if object.placeholder_image:
@@ -59,6 +59,9 @@ class LessonSerializer(serializers.ModelSerializer):
             return  round(sum(r.rating for r in reviews) / reviews.count(), 2)
         
         return None
+    
+    def get_reviews_count(self, object):
+        return object.reviews.count()
 
 
 
