@@ -131,6 +131,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
 
+
 JAZZMIN_SETTINGS = {
     "site_title": "SkillLearn Admin",
     "site_header": "SkillLearn Dashboard",

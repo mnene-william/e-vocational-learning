@@ -15,7 +15,7 @@ function ResetPassword(){
      const [searchParams] = useSearchParams()
 
      const token = searchParams.get("token")
-     const uid = searchParams.get("uid")
+
 
 
      const handleResetPassword = async (e) => {
@@ -29,7 +29,7 @@ function ResetPassword(){
 
         try{
             
-            await api.post("/password_reset/confirm/", {token, uid, new_password: password, re_new_password: confirmPassword})
+            await api.post("/password_reset/confirm/", {token, password})
 
             setSuccessMsg("Your password was reset successfully!")
 
