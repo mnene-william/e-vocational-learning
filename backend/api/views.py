@@ -62,7 +62,7 @@ class ContactMessageCreateView(viewsets.ModelViewSet):
 
 
 
-class UserProfileViewSet(viewsets.ModelViewSet):
+class UserProfileViewSet(viewsets.ReadOnlyModelViewSet):
 
     serializer_class = UserProfileSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -70,8 +70,9 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return UserProfile.objects.filter(user=self.request.user)
     
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+
+
+
 
 
 
