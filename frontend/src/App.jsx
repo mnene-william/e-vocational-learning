@@ -11,6 +11,7 @@ import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
 import Contact from './components/Contact';
 import UserProfile from './components/UserProfile';
+import SearchResults from './components/SearchResults';
 
 
 import './App.css'
@@ -47,6 +48,8 @@ function App() {
           <Route path="/contact" element={<Contact />} />
 
           <Route path="/profile" element={<ProtectedRoute><UserProfile/></ProtectedRoute>} />
+
+          <Route path="/search" element={<SearchResults/>} />
 
           
 
