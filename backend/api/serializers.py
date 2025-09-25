@@ -65,4 +65,20 @@ class ContactMessageSerializer(serializers.ModelSerializer):
         model = ContactMessage
         fields = "__all__"
 
+class LessonProgressSerializer(serializers.ModelSerializer):
+      lesson_title = serializers.CharField(source="lesson.title", read_only=True)
+
+      class Meta:
+          model = LessonProgress
+          fields = ["lesson", "lesson_title", "completed", "progress_percentage", "last_opened"]
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source="user.username", read_only=True)
+    email = serializers.EmailField(source="user.email", read_only=True)
+    progress = LessonProgressSerializer(source="user.progress", many=True, read_only=True)
+
+    class Meta:
+        model = UserProfile
+        fields = ["username", "email", "bio", "profile_picture", "progress"]
         
