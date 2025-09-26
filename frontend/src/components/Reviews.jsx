@@ -1,5 +1,5 @@
 import { useState } from "react";
-import api from "../api"; // ✅ use your configured api.js
+import api from "../api"; // 
 
 export default function Reviews({ lessonId, reviews = [] }) {
   const [content, setContent] = useState("");
@@ -10,35 +10,45 @@ export default function Reviews({ lessonId, reviews = [] }) {
 
     try {
       await api.post("/reviews/", {
-        lesson: lessonId, // auto attach lessonId
+        lesson: lessonId, 
         content,
         rating,
       });
 
       setContent("");
       setRating(0);
-      window.location.reload(); // quick refresh (or re-fetch lesson for better UX)
+      
+      window.location.reload(); 
     } catch (err) {
+
       console.error("Error submitting review:", err.response?.data || err.message);
     }
   };
 
   return (
+
     <div className="bg-white p-6 rounded-xl shadow mt-10">
+
       <h2 className="text-2xl font-semibold mb-4 text-gray-900">
         Reviews ({reviews.length})
       </h2>
 
+
       <ul className="space-y-4 mb-6">
         {reviews.length > 0 ? (
+
           reviews.map((rev) => (
+
             <li
               key={rev.id}
               className="border-b border-gray-200 pb-3 last:border-none"
             >
+
               <strong className="text-indigo-600">{rev.user.username}</strong>{" "}
-              <span className="text-yellow-500">({rev.rating}★)</span>
+              <span className="text-yellow-500">({rev.rating} stars)</span>
+
               <p className="text-gray-700 mt-1">{rev.content}</p>
+
             </li>
           ))
         ) : (
@@ -49,11 +59,13 @@ export default function Reviews({ lessonId, reviews = [] }) {
       <form onSubmit={handleSubmit} className="space-y-4">
         <textarea
           className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+
           placeholder="Write your review"
           value={content}
           onChange={(e) => setContent(e.target.value)}
           required
         />
+        
         <input
           type="number"
           min="1"

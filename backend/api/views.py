@@ -31,18 +31,20 @@ class LessonViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
 
         if request.user.is_authenticated:
-            # Get or create the LessonProgress record
-            lesson_progress, created = LessonProgress.objects.get_or_create(
-                user=request.user,
-                lesson=instance
-            )
+            
 
-            # Increment by 10% each time user opens the lesson
-            lesson_progress.progress_percentage = min(
-                lesson_progress.progress_percentage + 10,
-                100
-            )
+            lesson_progress, created = LessonProgress.objects.get_or_create(user=request.user,lesson=instance)
+                
+                
+            
+
+           
+            lesson_progress.progress_percentage = min(lesson_progress.progress_percentage + 10, 100)
+                
+                
+            
             lesson_progress.completed = lesson_progress.progress_percentage == 100
+
             lesson_progress.save()
 
         serializer = self.get_serializer(instance)
@@ -61,7 +63,7 @@ class UserProgressViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def perform_create(self, serializer):
-        # Automatically attach the logged-in user
+        
         serializer.save(user=self.request.user)
 
 
@@ -74,21 +76,22 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
     
     def get_queryset(self):
-        """
-        Allow filtering reviews by lesson ID with ?lesson=<id>
-        Example: /api/reviews/?lesson=5
-        """
+
         lesson_id = self.request.query_params.get("lesson")
+
         if lesson_id:
+
             return Review.objects.filter(lesson_id=lesson_id)
+        
         return super().get_queryset()
 
     def perform_create(self, serializer):
-        # Automatically set the user to the logged-in user
+       
         serializer.save(user=self.request.user)
 
 
 class ContactMessageCreateView(viewsets.ModelViewSet):
+
     queryset = ContactMessage.objects.all()
     serializer_class = ContactMessageSerializer
     permission_classes = [AllowAny]
@@ -116,17 +119,20 @@ def search(request):
     if not query:
         return Response({"skill": None, "lessons": []})
 
-    # First: check if query matches a Skill
+    # The first step is to check if query matches a Skill
     matching_skills = Skill.objects.filter(name__icontains=query)
+
     if matching_skills.exists():
+
         lessons = Lesson.objects.filter(category__in=matching_skills)
         serializer = LessonSerializer(lessons.distinct(), many=True)
         return Response({
             "skill": matching_skills.first().name,
             "lessons": serializer.data
         })
+    
 
-    # Otherwise: search Lessons directly
+    # Otherwise search Lessons directly
     lessons = Lesson.objects.filter(
         Q(title__icontains=query) | Q(content__icontains=query)
     )
@@ -147,13 +153,17 @@ class TrackLessonProgressView(generics.CreateAPIView):
         lesson_id = request.data.get("lesson_id")
         progress_percentage = request.data.get("progress_percentage", 0)
 
+
         try:
             lesson = Lesson.objects.get(id=lesson_id)
+
         except Lesson.DoesNotExist:
+
             return Response({"error": "Lesson not found"}, status=status.HTTP_404_NOT_FOUND)
 
-        # Get or create LessonProgress for this user + lesson
+        # Get or create(kama user hana) LessonProgress for this user + lesson
         progress, created = LessonProgress.objects.get_or_create(
+
             user=request.user,
             lesson=lesson,
             defaults={"progress_percentage": progress_percentage}
@@ -161,14 +171,18 @@ class TrackLessonProgressView(generics.CreateAPIView):
 
         if not created:
             # Update progress if higher than before
-            progress.progress_percentage = max(
-                progress.progress_percentage,
-                float(progress_percentage)
-            )
-            # Mark completed if 100%
+            progress.progress_percentage = max(progress.progress_percentage,float(progress_percentage))
+                
+                
+            
+
+            # Mark the lesson as completed if the progress percentage is greater that 100
             if progress.progress_percentage >= 100:
+
                 progress.completed = True
+
             progress.save()
 
         serializer = self.get_serializer(progress)
+        
         return Response(serializer.data, status=status.HTTP_200_OK)

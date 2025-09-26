@@ -84,13 +84,15 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Popular Courses Section */}
+      {/* This is where the popular courses are displayed . They can only be less than or equal to 9 */}
       <section className="py-16 bg-white text-gray-900">
         <div className="container mx-auto px-6">
+
           <h2 className="text-3xl font-bold text-center mb-12">Popular Courses</h2>
 
           <div className="grid gap-8 md:grid-cols-3">
             {lessons.slice(0, 9).map((lesson) => (
+
               <div
                 key={lesson.id}
                 className="bg-gray-100 rounded-xl shadow-lg overflow-hidden transform transition hover:shadow-2xl hover:-translate-y-1"
@@ -105,6 +107,7 @@ export default function HomePage() {
                     className="w-full h-full object-cover"
                   />
                 </div>
+                
 
                 <div className="p-6">
                   <h3 className="font-bold text-xl mb-2">{lesson.title}</h3>
