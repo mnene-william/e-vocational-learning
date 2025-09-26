@@ -40,6 +40,8 @@ class LessonSerializer(serializers.ModelSerializer):
 
     average_rating = serializers.SerializerMethodField()
 
+    reviews_count = serializers.SerializerMethodField()
+
     class Meta:
         model = Lesson
 

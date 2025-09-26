@@ -2,83 +2,68 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import api from "../api";
 import Navbar from "./Navbar";
+import Reviews from "./Reviews";
 
 function LessonDetail() {
   const { id } = useParams();
   const [lesson, setLesson] = useState(null);
+  const [reviews, setReviews] = useState([]);
 
-  const [nextLesson, setNextLesson] = useState(null)
-  const [prevLesson, setPrevLesson] = useState(null)
+  const [nextLesson, setNextLesson] = useState(null);
+  const [prevLesson, setPrevLesson] = useState(null);
 
   useEffect(() => {
-
+    // Fetch lesson
     api.get(`/lessons/${id}/`).then((response) => {
-
       setLesson(response.data);
 
+      const currentLessonId = parseInt(id);
 
-      const currentLessonId = parseInt(id)
+      api
+        .get(`/lessons/${currentLessonId + 1}/`)
+        .then((response) => setNextLesson(response.data))
+        .catch(() => setNextLesson(null));
 
-      api.get(`/lessons/${currentLessonId + 1}/`).then((response) => 
-        setNextLesson(response.data)).catch(() => setNextLesson(null))
-
-      api.get(`/lessons/${currentLessonId - 1}/`).then((response) => 
-        setPrevLesson(response.data)).catch(() => setPrevLesson(null));
-
-    
-    
-
+      api
+        .get(`/lessons/${currentLessonId - 1}/`)
+        .then((response) => setPrevLesson(response.data))
+        .catch(() => setPrevLesson(null));
     });
 
+    // Fetch reviews for this lesson
+    api
+      .get(`/reviews/?lesson=${id}`)
+      .then((res) => setReviews(res.data))
+      .catch(() => setReviews([]));
   }, [id]);
 
-  if (!lesson) {
+  // Add new review instantly after submission
+  const handleNewReview = (review) => {
+    setReviews((prev) => [...prev, review]);
+  };
 
+  if (!lesson) {
     return <p className="text-center mt-10 text-gray-500">Loading lesson...</p>;
   }
 
+  function formatYouTubeLink(url) {
+    if (!url) return null;
 
+    if (url.includes("watch?v=")) {
+      return url.replace("watch?v=", "embed/");
+    }
 
+    if (url.includes("youtu.be/")) {
+      const videoId = url.split("youtu.be/")[1].split("?")[0];
+      return `https://www.youtube.com/embed/${videoId}`;
+    }
 
-function formatYouTubeLink(url) {
-  if (!url) return null;
-
-
-  if (url.includes("watch?v=")) {
-    return url.replace("watch?v=", "embed/");
+    return url;
   }
-
-
-  if (url.includes("youtu.be/")) {
-    const videoId = url.split("youtu.be/")[1].split("?")[0];
-
-    return `https://www.youtube.com/embed/${videoId}`;
-  }
-
-  return url; 
-}
-
-
-function getYouTubeId(url) {
-
-  if (!url) return null;
-
-  if (url.includes("watch?v=")) {
-    return url.split("watch?v=")[1].split("&")[0];
-  }
-
-  if (url.includes("youtu.be/")) {
-
-    return url.split("youtu.be/")[1].split("?")[0];
-  }
-
-  return null;
-}
-
 
   return (
     <>
-         {/* Hero */}
+      {/* Hero */}
       <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-10">
         <div className="max-w-6xl mx-auto px-6">
           <h1 className="text-4xl font-bold mb-2">{lesson.title}</h1>
@@ -112,9 +97,19 @@ function getYouTubeId(url) {
             <h2 className="text-2xl font-semibold mb-4 text-gray-900">
               Lesson Notes
             </h2>
-            <div className="prose prose-indigo max-w-none">
-              {lesson.content}
-            </div>
+            <div className="prose prose-indigo max-w-none">{lesson.content}</div>
+          </div>
+
+          {/* Reviews Section */}
+          <div className="bg-white p-6 rounded-xl shadow">
+            <h2 className="text-2xl font-semibold mb-4 text-gray-900">
+              Student Reviews
+            </h2>
+            <Reviews
+              lessonId={id}
+              reviews={reviews}
+              onNewReview={handleNewReview}
+            />
           </div>
         </div>
 
@@ -187,14 +182,17 @@ function getYouTubeId(url) {
             to={`/lessons/${parseInt(id) + 1}`}
             className="px-6 py-3 rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition"
           >
-            NextLesson →
+            Next Lesson →
           </Link>
         ) : (
           <div></div>
         )}
       </div>
-
-  </>);
+    </>
+  );
 }
 
 export default LessonDetail;
+
+
+

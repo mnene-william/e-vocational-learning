@@ -12,6 +12,7 @@ import ResetPassword from './components/ResetPassword';
 import Contact from './components/Contact';
 import UserProfile from './components/UserProfile';
 import SearchResults from './components/SearchResults';
+import Reviews from './components/Reviews';
 
 
 import './App.css'
@@ -50,6 +51,8 @@ function App() {
           <Route path="/profile" element={<ProtectedRoute><UserProfile/></ProtectedRoute>} />
 
           <Route path="/search" element={<SearchResults/>} />
+
+          <Route path="/reviews" element={<Reviews/>} />
 
           
 
