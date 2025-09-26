@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api";
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 
 function LessonsList() {
   const [lessons, setLessons] = useState([]);
@@ -84,6 +85,7 @@ function LessonsList() {
           </div>
         )}
       </div>
+      <Footer />
     </>
   );
 }

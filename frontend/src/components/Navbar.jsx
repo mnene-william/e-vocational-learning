@@ -109,7 +109,7 @@ function Navbar() {
             <>
               <Link
                 to="/login"
-                className="text-white/90 hover:text-white px-4 py-2 rounded-full 
+                className="text-white hover:text-white px-4 py-2 rounded-full 
                            backdrop-blur-sm bg-white/10 border border-white/10 hover:bg-white/20 
                            transition-all duration-200"
               >

@@ -33,11 +33,11 @@ function Footer(){
 
                             <li><a href="/lessons">Explore</a></li> 
 
-                            <li><a href="#">Profile</a></li> 
+                            <li><a href="/profile">Profile</a></li> 
 
                             <li><a href="/contact">Contact</a></li> 
 
-                            <li><a href="#">Home</a></li> 
+                           
 
                         </ul>
 
