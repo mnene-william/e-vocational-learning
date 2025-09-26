@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import api from "../api";
+import Navbar from "./Navbar";
 
 function UserProfile() {
   const [profile, setProfile] = useState(null);
@@ -25,10 +26,15 @@ function UserProfile() {
 
   return (
     <div className="min-h-screen bg-gray-100 py-10 px-4 md:px-6 flex justify-center">
+        <Navbar />
+    
       <div className="w-full md:w-3/4">
+      
         {errorMsg && (
           <p className="mb-6 text-red-600 font-medium text-center">{errorMsg}</p>
         )}
+
+
 
         {profile && (
           <>

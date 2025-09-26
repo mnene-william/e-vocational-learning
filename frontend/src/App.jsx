@@ -13,6 +13,7 @@ import Contact from './components/Contact';
 import UserProfile from './components/UserProfile';
 import SearchResults from './components/SearchResults';
 import Reviews from './components/Reviews';
+import Quiz from './components/Quiz';
 
 
 import './App.css'
@@ -53,6 +54,8 @@ function App() {
           <Route path="/search" element={<SearchResults/>} />
 
           <Route path="/reviews" element={<Reviews/>} />
+
+          <Route path="/quiz" element={<Quiz/>} />
 
           
 

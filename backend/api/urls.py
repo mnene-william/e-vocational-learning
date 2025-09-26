@@ -20,7 +20,8 @@ urlpatterns = [
     path("token/refresh/", TokenRefreshView.as_view(), name="refresh_token"),
     path("search/", search, name="search"),
     path("track-progress/", TrackLessonProgressView.as_view(), name="track-progress"),
-    path("", include(router.urls))
+    path("", include(router.urls)),
+    path("lessons/<int:lesson_id>/generate-quiz/", generate_quiz, name="generate_quiz")
     
 
 ]
