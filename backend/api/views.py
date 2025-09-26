@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
-from rest_framework import generics, viewsets, permissions, filters
-from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
+from rest_framework import generics, viewsets, permissions, filters, status
+from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly, IsAuthenticated
 from .serializers import *
 from rest_framework.response import Response
 from  .models import Skill, Lesson, UserProfile
@@ -26,6 +26,27 @@ class LessonViewSet(viewsets.ModelViewSet):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     permission_classes = [AllowAny]
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        if request.user.is_authenticated:
+            # Get or create the LessonProgress record
+            lesson_progress, created = LessonProgress.objects.get_or_create(
+                user=request.user,
+                lesson=instance
+            )
+
+            # Increment by 10% each time user opens the lesson
+            lesson_progress.progress_percentage = min(
+                lesson_progress.progress_percentage + 10,
+                100
+            )
+            lesson_progress.completed = lesson_progress.progress_percentage == 100
+            lesson_progress.save()
+
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
 
 
 class QuizQuestionViewSet(viewsets.ModelViewSet):
@@ -118,3 +139,36 @@ def search(request):
 
 
 
+class TrackLessonProgressView(generics.CreateAPIView):
+    serializer_class = LessonProgressSerializer
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        lesson_id = request.data.get("lesson_id")
+        progress_percentage = request.data.get("progress_percentage", 0)
+
+        try:
+            lesson = Lesson.objects.get(id=lesson_id)
+        except Lesson.DoesNotExist:
+            return Response({"error": "Lesson not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        # Get or create LessonProgress for this user + lesson
+        progress, created = LessonProgress.objects.get_or_create(
+            user=request.user,
+            lesson=lesson,
+            defaults={"progress_percentage": progress_percentage}
+        )
+
+        if not created:
+            # Update progress if higher than before
+            progress.progress_percentage = max(
+                progress.progress_percentage,
+                float(progress_percentage)
+            )
+            # Mark completed if 100%
+            if progress.progress_percentage >= 100:
+                progress.completed = True
+            progress.save()
+
+        serializer = self.get_serializer(progress)
+        return Response(serializer.data, status=status.HTTP_200_OK)

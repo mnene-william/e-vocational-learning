@@ -19,6 +19,7 @@ urlpatterns = [
     path("token/", TokenObtainPairView.as_view(), name="get_token"),
     path("token/refresh/", TokenRefreshView.as_view(), name="refresh_token"),
     path("search/", search, name="search"),
+    path("track-progress/", TrackLessonProgressView.as_view(), name="track-progress"),
     path("", include(router.urls))
     
 

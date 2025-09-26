@@ -8,7 +8,6 @@ function LessonDetail() {
   const { id } = useParams();
   const [lesson, setLesson] = useState(null);
   const [reviews, setReviews] = useState([]);
-
   const [nextLesson, setNextLesson] = useState(null);
   const [prevLesson, setPrevLesson] = useState(null);
 
@@ -35,6 +34,22 @@ function LessonDetail() {
       .get(`/reviews/?lesson=${id}`)
       .then((res) => setReviews(res.data))
       .catch(() => setReviews([]));
+
+    // Track progress (mark as started when opened)
+    const trackProgress = async () => {
+      try {
+        await api.post("/track-progress/", {
+          lesson_id: id,
+          progress_percentage: 10, // mark as 10% just for opening
+        });
+      } catch (err) {
+        console.error("Progress tracking failed:", err);
+      }
+    };
+
+    if (id) {
+      trackProgress();
+    }
   }, [id]);
 
   // Add new review instantly after submission
@@ -193,6 +208,7 @@ function LessonDetail() {
 }
 
 export default LessonDetail;
+
 
 
 
