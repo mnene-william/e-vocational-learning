@@ -226,7 +226,7 @@ function LessonDetail() {
 
       </div>
 
-      {/* Bottom Navigation */}
+      {/* This is where I have placed the Previous and Next Lesson buttons */}
       <div className="max-w-6xl mx-auto px-6 py-10 flex justify-between">
 
         {prevLesson ? (
@@ -252,7 +252,7 @@ function LessonDetail() {
         ) : (
           <div></div>
         )}
-        
+
       </div>
     </>
   );

@@ -1,6 +1,7 @@
 import {useState} from "react";
 import {motion} from "framer-motion";
 import api from "../api";
+import { useNavigate } from "react-router-dom";
 
 
 function ForgotPassword(){
@@ -9,6 +10,8 @@ function ForgotPassword(){
     const [successMsg, setSuccessMsg] = useState("")
     const [errorMsg, setErrorMsg] = useState("")
     const [loading, setLoading] = useState(false)
+
+    const navigate = useNavigate()
 
 
     const handlePasswordReset = async (e) =>{
@@ -64,10 +67,26 @@ return(
                 </motion.div>
             )}
 
+
+                <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => navigate("/login")} 
+                        className="mb-4 text-sm text-indigo-600 hover:underline"
+                >
+                   ← Back
+                </motion.button>
+
            
            <form onSubmit={handlePasswordReset} className="space-y-4">
 
+
+
+
                 <motion.div>
+
+
+                    
 
                     <label className="block text-sm font-medium text-gray-700">
                         Email Address
