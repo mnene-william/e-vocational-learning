@@ -30,15 +30,17 @@ export default function HomePage() {
 
   return (
     <>
-      <Navbar />
+      
 
       <main
+        
         className="relative min-h-screen flex flex-col items-center justify-center bg-cover bg-center text-white p-4 pt-32 font-display overflow-hidden"
         style={{
           backgroundImage:
             "url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80')",
         }}
       >
+        <Navbar />
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70"></div>
 
         <div className="relative z-10 flex flex-col items-center justify-center text-center space-y-6 animate-fade-in-up">
@@ -107,7 +109,7 @@ export default function HomePage() {
                     className="w-full h-full object-cover"
                   />
                 </div>
-                
+
 
                 <div className="p-6">
                   <h3 className="font-bold text-xl mb-2">{lesson.title}</h3>
