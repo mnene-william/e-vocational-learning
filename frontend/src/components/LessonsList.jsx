@@ -23,6 +23,7 @@ function LessonsList() {
 
       
       <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-10 mb-8">
+        <Navbar />
 
         <div className="max-w-6xl mx-auto px-6">
           <h1 className="text-4xl font-bold">Available Lessons</h1>
@@ -90,7 +91,7 @@ function LessonsList() {
 
                     View Lesson →
                   </button>
-                  
+
                 </div>
               </div>
             ))}

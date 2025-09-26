@@ -40,7 +40,7 @@ function App() {
 
       
 
-          <Route path="/lessons" element={<ProtectedRoute><LessonList /></ProtectedRoute>} />
+          <Route path="/lessons" element={<LessonList />} />
 
           <Route path="/lessons/:id" element={<ProtectedRoute><LessonDetail /></ProtectedRoute>} />
 
