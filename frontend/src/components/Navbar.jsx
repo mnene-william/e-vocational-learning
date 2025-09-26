@@ -1,27 +1,49 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [profileDropdown, setProfileDropdown] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   const [auth, setAuth] = useState({
     token: localStorage.getItem("access") || localStorage.getItem("ACCESS_TOKEN"),
     username: localStorage.getItem("username") || localStorage.getItem("USERNAME"),
-    profile_picture: localStorage.getItem("profile_picture") || null,
   });
 
   const navigate = useNavigate();
   const isAuthenticated = !!auth.token;
-  const dropdownRef = useRef();
+
+  // Add scroll effect for better glass appearance
+  useEffect(() => {
+    const handleScroll = () => {
+      const isScrolled = window.scrollY > 10;
+      setScrolled(isScrolled);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Listen for auth changes
+  useEffect(() => {
+    const handleAuthChange = () => {
+      setAuth({
+        token: localStorage.getItem("access") || localStorage.getItem("ACCESS_TOKEN"),
+        username: localStorage.getItem("username") || localStorage.getItem("USERNAME"),
+      });
+    };
+
+    window.addEventListener("authChange", handleAuthChange);
+    return () => window.removeEventListener("authChange", handleAuthChange);
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("access");
     localStorage.removeItem("ACCESS_TOKEN");
     localStorage.removeItem("username");
     localStorage.removeItem("USERNAME");
-    localStorage.removeItem("profile_picture");
     window.dispatchEvent(new Event("authChange"));
     navigate("/login");
   };
@@ -33,180 +55,223 @@ function Navbar() {
     setSearchQuery("");
   };
 
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setDropdownOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  const getAvatarUrl = (customUrl) => customUrl || "/default-avatar.png";
-
   return (
-    <header className="bg-white/10 backdrop-blur-lg border-b border-gray-200 shadow-md">
-      <nav className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-        {/* Logo */}
+    <header className="fixed top-0 left-0 right-0 z-50">
+      {/* Enhanced Glassmorphism Navbar */}
+      <nav className={`
+        container mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between
+        transition-all duration-300 ease-in-out
+        ${scrolled 
+          ? "bg-white/15 backdrop-blur-xl shadow-2xl border-b border-white/30" 
+          : "bg-white/10 backdrop-blur-lg shadow-lg border-b border-white/20"
+        }
+      `}>
+        {/* Logo with glass effect */}
         <Link
           to="/"
-          className="text-xl font-extrabold bg-gradient-to-r from-indigo-400 to-pink-500 bg-clip-text text-transparent"
+          className="text-xl font-extrabold bg-gradient-to-r from-indigo-300 to-pink-400 bg-clip-text text-transparent 
+                     px-3 py-1 rounded-lg backdrop-blur-sm bg-white/5 border border-white/10 hover:bg-white/10 transition-all"
         >
           E-vocational Learning
         </Link>
 
-        {/* Centered Search Bar */}
+        {/* Centered Search with glass effect */}
         <form
           onSubmit={handleSearch}
-          className="flex-1 mx-4 hidden md:flex justify-center"
+          className="hidden md:flex flex-1 max-w-md mx-4 justify-center"
         >
-          <input
-            type="text"
-            placeholder="Search skills or lessons..."
-            className="w-full max-w-lg bg-white/20 text-white placeholder-white/70 px-4 py-1 rounded-full outline-none focus:ring-2 focus:ring-indigo-400"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <button
-            type="submit"
-            className="ml-2 px-4 py-1 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium"
-          >
-            Search
-          </button>
+          <div className="relative flex-1">
+            <input
+              type="text"
+              placeholder="Search skills or lessons..."
+              className="w-full bg-white/15 text-white placeholder-white/70 px-4 py-2 rounded-full 
+                         outline-none focus:ring-2 focus:ring-white/30 focus:bg-white/20
+                         backdrop-blur-sm border border-white/20 transition-all"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <button
+              type="submit"
+              className="absolute right-1 top-1/2 transform -translate-y-1/2 
+                         w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 
+                         flex items-center justify-center transition-all backdrop-blur-sm"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </button>
+          </div>
         </form>
 
-        {/* Right-side Links & Profile */}
-        <div className="hidden md:flex items-center space-x-4">
-          <Link to="/" className="text-white hover:text-pink-400 transition">
-            Home
-          </Link>
-          <Link to="/lessons" className="text-white hover:text-pink-400 transition">
-            Explore
-          </Link>
-
-          {isAuthenticated ? (
-            <div className="relative" ref={dropdownRef}>
-              <button
-                onClick={() => setDropdownOpen(!dropdownOpen)}
-                className="w-10 h-10 rounded-full overflow-hidden border-2 border-indigo-500 hover:ring-2 hover:ring-indigo-400 transition"
+        {/* Right-side Nav Links + Profile */}
+        <div className="hidden md:flex items-center space-x-3">
+          {!isAuthenticated ? (
+            <>
+              <Link
+                to="/login"
+                className="text-white/90 hover:text-white px-4 py-2 rounded-full 
+                           backdrop-blur-sm bg-white/10 border border-white/10 hover:bg-white/20 
+                           transition-all duration-200"
               >
-                <img
-                  src={getAvatarUrl(auth.profile_picture)}
-                  alt="Profile"
-                  className="w-full h-full object-cover"
-                />
+                Login
+              </Link>
+              <Link
+                to="/signup"
+                className="text-white px-4 py-2 rounded-full bg-gradient-to-r from-indigo-500/90 to-pink-500/90 
+                           hover:from-indigo-600 hover:to-pink-600 border border-white/20 
+                           backdrop-blur-sm transition-all duration-200"
+              >
+                Sign Up
+              </Link>
+            </>
+          ) : (
+            <div className="relative">
+              {/* Profile Icon with glass effect */}
+              <button
+                className="w-10 h-10 rounded-full bg-white/20 text-white flex items-center justify-center 
+                           font-bold border border-white/20 backdrop-blur-sm hover:bg-white/30 
+                           transition-all duration-200 shadow-lg"
+                onClick={() => setProfileDropdown(!profileDropdown)}
+              >
+                {auth.username ? auth.username.charAt(0).toUpperCase() : "U"}
               </button>
 
-              {dropdownOpen && (
-                <div className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg py-2 z-50">
-                  <Link
-                    to="/profile"
-                    className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
-                    onClick={() => setDropdownOpen(false)}
+              {/* Dropdown with glass effect */}
+              {profileDropdown && (
+                <div className="absolute right-0 mt-2 w-48 rounded-2xl shadow-2xl border border-white/20 
+                              backdrop-blur-xl bg-white/15 py-2 z-20 animate-fade-in">
+                  <div className="px-3 py-2 border-b border-white/10">
+                    <p className="text-white/80 text-sm">Signed in as</p>
+                    <p className="text-white font-medium truncate">{auth.username}</p>
+                  </div>
+                  <button
+                    onClick={() => {
+                      navigate("/profile");
+                      setProfileDropdown(false);
+                    }}
+                    className="block w-full text-left px-4 py-3 text-white/90 hover:bg-white/10 
+                               transition-all duration-150 border-b border-white/5"
                   >
-                    Go to Profile
-                  </Link>
+                    👤 Profile
+                  </button>
                   <button
                     onClick={handleLogout}
-                    className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
+                    className="block w-full text-left px-4 py-3 text-white/90 hover:bg-white/10 
+                               transition-all duration-150 text-red-200 hover:text-red-100"
                   >
-                    Logout
+                    🚪 Logout
                   </button>
                 </div>
               )}
             </div>
-          ) : (
-            <>
-              <Link to="/login" className="text-white hover:text-pink-400 transition">
-                Login
-              </Link>
-              <Link to="/signup" className="text-white hover:text-pink-400 transition">
-                Sign Up
-              </Link>
-            </>
           )}
         </div>
 
         {/* Mobile Hamburger */}
         <button
-          className="text-white md:hidden ml-2"
+          className="text-white md:hidden ml-2 w-10 h-10 rounded-lg backdrop-blur-sm 
+                     bg-white/10 border border-white/10 hover:bg-white/20 flex items-center justify-center
+                     transition-all duration-200"
           onClick={() => setIsOpen(!isOpen)}
         >
           {isOpen ? (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-7 h-7"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           ) : (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-7 h-7"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           )}
         </button>
       </nav>
 
-      {/* Mobile Menu */}
+      {/* Enhanced Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden bg-white/10 backdrop-blur-lg border-t border-white/20 shadow-md">
-          <div className="flex flex-col items-center py-4 space-y-3">
-            <Link to="/" className="text-white hover:text-pink-400 transition">
-              Home
+        <div className="md:hidden fixed inset-x-0 top-16 mt-2 mx-4 rounded-2xl shadow-2xl 
+                      border border-white/20 backdrop-blur-xl bg-white/15 animate-slide-down">
+          <div className="flex flex-col items-center py-6 space-y-4">
+            <Link 
+              to="/" 
+              className="text-white/90 hover:text-white px-6 py-3 rounded-full w-4/5 text-center
+                         backdrop-blur-sm bg-white/10 border border-white/10 hover:bg-white/20 transition-all"
+              onClick={() => setIsOpen(false)}
+            >
+               Home
             </Link>
-            <Link to="/lessons" className="text-white hover:text-pink-400 transition">
-              Explore
+            <Link 
+              to="/lessons" 
+              className="text-white/90 hover:text-white px-6 py-3 rounded-full w-4/5 text-center
+                         backdrop-blur-sm bg-white/10 border border-white/10 hover:bg-white/20 transition-all"
+              onClick={() => setIsOpen(false)}
+            >
+               Explore
             </Link>
 
-            <form onSubmit={handleSearch} className="flex w-full px-4">
+            <form onSubmit={handleSearch} className="flex w-4/5 px-2 space-x-2">
               <input
                 type="text"
                 placeholder="Search..."
-                className="flex-1 px-3 py-1 rounded-l-full bg-white/20 text-white placeholder-white/70 outline-none"
+                className="flex-1 px-4 py-2 rounded-full bg-white/15 text-white placeholder-white/70 
+                           outline-none border border-white/20 backdrop-blur-sm"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
               <button
                 type="submit"
-                className="px-3 py-1 rounded-r-full bg-indigo-600 text-white hover:bg-indigo-700"
+                className="px-4 py-2 rounded-full bg-white/20 hover:bg-white/30 text-white 
+                           backdrop-blur-sm border border-white/20 transition-all"
+                onClick={() => setIsOpen(false)}
               >
-                Go
+                🔍
               </button>
             </form>
 
-            {isAuthenticated ? (
+            {!isAuthenticated ? (
               <>
-                <Link to="/profile" className="text-white hover:text-pink-400 transition">
-                  Go to Profile
-                </Link>
-                <button
-                  onClick={handleLogout}
-                  className="text-white hover:text-red-400 transition"
+                <Link 
+                  to="/login" 
+                  className="text-white/90 hover:text-white px-6 py-3 rounded-full w-4/5 text-center
+                             backdrop-blur-sm bg-white/10 border border-white/10 hover:bg-white/20 transition-all"
+                  onClick={() => setIsOpen(false)}
                 >
-                  Logout
-                </button>
+                   Login
+                </Link>
+                <Link 
+                  to="/signup" 
+                  className="text-white px-6 py-3 rounded-full w-4/5 text-center
+                             bg-gradient-to-r from-indigo-500/90 to-pink-500/90 
+                             hover:from-indigo-600 hover:to-pink-600 border border-white/20 
+                             backdrop-blur-sm transition-all"
+                  onClick={() => setIsOpen(false)}
+                >
+                   Sign Up
+                </Link>
               </>
             ) : (
               <>
-                <Link to="/login" className="text-white hover:text-pink-400 transition">
-                  Login
+                <div className="px-6 py-3 text-center border-t border-white/10 w-full">
+                  <p className="text-white/70 text-sm">Signed in as</p>
+                  <p className="text-white font-medium">{auth.username}</p>
+                </div>
+                <Link 
+                  to="/profile" 
+                  className="text-white/90 hover:text-white px-6 py-3 rounded-full w-4/5 text-center
+                             backdrop-blur-sm bg-white/10 border border-white/10 hover:bg-white/20 transition-all"
+                  onClick={() => setIsOpen(false)}
+                >
+                   Profile
                 </Link>
-                <Link to="/signup" className="text-white hover:text-pink-400 transition">
-                  Sign Up
-                </Link>
+                <button 
+                  onClick={() => {
+                    handleLogout();
+                    setIsOpen(false);
+                  }} 
+                  className="text-red-200 hover:text-red-100 px-6 py-3 rounded-full w-4/5 text-center
+                             backdrop-blur-sm bg-red-500/20 border border-red-300/20 hover:bg-red-500/30 transition-all"
+                >
+                   Logout
+                </button>
               </>
             )}
           </div>
@@ -217,6 +282,13 @@ function Navbar() {
 }
 
 export default Navbar;
+
+
+
+
+
+
+
 
 
 
