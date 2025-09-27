@@ -19,12 +19,12 @@ function LessonDetail() {
 
       api
         .get(`/lessons/${currentLessonId + 1}/`)
-        .then((response) => setNextLesson(response.data))
+        .then((res) => setNextLesson(res.data))
         .catch(() => setNextLesson(null));
 
       api
         .get(`/lessons/${currentLessonId - 1}/`)
-        .then((response) => setPrevLesson(response.data))
+        .then((res) => setPrevLesson(res.data))
         .catch(() => setPrevLesson(null));
     });
 
@@ -35,10 +35,7 @@ function LessonDetail() {
 
     const trackProgress = async () => {
       try {
-        await api.post("/track-progress/", {
-          lesson_id: id,
-          progress_percentage: 10,
-        });
+        await api.post("/track-progress/", { lesson_id: id, progress_percentage: 10 });
       } catch (err) {
         console.error("Progress tracking failed:", err);
       }
@@ -67,8 +64,6 @@ function LessonDetail() {
 
   return (
     <>
-
-
       <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-10">
         <Navbar />
         <div className="max-w-6xl mx-auto px-6">
@@ -94,25 +89,17 @@ function LessonDetail() {
             </div>
           )}
 
-          {/* Enhanced Lesson Notes */}
           <div className="bg-white p-6 rounded-xl shadow-lg">
             <h2 className="text-2xl font-semibold mb-4 text-gray-900 border-b border-gray-200 pb-2">
               Lesson Notes
             </h2>
-
             <div className="prose prose-indigo max-w-none text-gray-800 space-y-6">
-              {/* Render lesson content */}
               {lesson.content}
-
-
-
 
               <ul className="list-disc pl-5 space-y-2">
                 <li>Understand the lesson concept</li>
                 <li>Follow along with the video</li>
-                
               </ul>
-
 
               <ol className="list-decimal pl-5 space-y-2">
                 <li>Watch the lesson video carefully</li>
@@ -120,7 +107,6 @@ function LessonDetail() {
                 <li>Apply concepts later on</li>
               </ol>
 
-   
               <div className="mt-6 p-4 rounded-lg bg-indigo-50 border-l-4 border-indigo-500 text-indigo-700">
                 <p className="font-medium"> Tip:</p>
                 <p>Remember to practice exercises after reading the notes for better retention.</p>
@@ -128,13 +114,11 @@ function LessonDetail() {
             </div>
           </div>
 
-   
           <div className="bg-white p-6 rounded-xl shadow">
             <h2 className="text-2xl font-semibold mb-4 text-gray-900">Student Reviews</h2>
             <Reviews lessonId={id} reviews={reviews} onNewReview={handleNewReview} />
           </div>
         </div>
-
 
         <aside className="space-y-6">
           <div className="bg-white p-6 rounded-xl shadow">
@@ -163,46 +147,33 @@ function LessonDetail() {
             </div>
           )}
 
-          <div className="bg-white p-6 rounded-xl shadow">
+          <div className="bg-white p-6 rounded-xl shadow space-y-2">
             <Link
               to="/lessons"
               className="block w-full text-center rounded-lg bg-indigo-600 text-white py-2 font-medium hover:bg-indigo-700 transition"
             >
               Back to Lessons
             </Link>
+
+            {/* Navigate to existing quiz */}
+            <Link
+              to={`/lessons/${lesson.id}/quiz`}
+              className="w-full block mt-2 text-center rounded-lg py-2 font-medium bg-green-600 text-white hover:bg-green-700 transition"
+            >
+              Go to Quiz
+            </Link>
           </div>
         </aside>
-      </div>
-
-
-      <div className="max-w-6xl mx-auto px-6 py-10 flex justify-between">
-        {prevLesson ? (
-          <Link
-            to={`/lessons/${parseInt(id) - 1}`}
-            className="px-6 py-3 rounded-lg bg-gray-200 text-gray-700 font-medium hover:bg-gray-300 transition"
-          >
-            ← Previous Lesson
-          </Link>
-        ) : (
-          <div></div>
-        )}
-
-        {nextLesson ? (
-          <Link
-            to={`/lessons/${parseInt(id) + 1}`}
-            className="px-6 py-3 rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition"
-          >
-            Next Lesson →
-          </Link>
-        ) : (
-          <div></div>
-        )}
       </div>
     </>
   );
 }
 
 export default LessonDetail;
+
+
+
+
 
 
 

@@ -55,7 +55,7 @@ function App() {
 
           <Route path="/reviews" element={<Reviews/>} />
 
-          <Route path="/quiz" element={<Quiz/>} />
+          <Route path="/lessons/:lessonId/quiz" element={<Quiz/>} />
 
           
 

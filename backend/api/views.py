@@ -12,96 +12,7 @@ import requests
 
 
 
-GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
-
-@api_view(["POST"])
-@permission_classes([IsAuthenticated])
-def generate_quiz(request, lesson_id):
-
-    try:
-
-        lesson = Lesson.objects.get(id=lesson_id)
-
-    except Lesson.DoesNotExist:
-
-        return Response({"error": "Lesson not found"}, status=404)
-
- 
-    prompt = f"""
-    Generate 4 multiple-choice questions (A-D) with correct answers
-    from the following lesson content:
-
-    {lesson.content}
-
-    Return in this JSON format:
-    [
-      {{
-        "question_text": "...",
-        "option_a": "...",
-        "option_b": "...",
-        "option_c": "...",
-        "option_d": "...",
-        "correct_option": "A/B/C/D"
-      }},
-      ...
-    ]
-    """
-
-    payload = {
-        "contents": [
-
-            {"parts": [{"text": prompt}]}
-
-        ]
-    }
-
-    headers = {
-        "x-goog-api-key": GEMINI_API_KEY,
-        "Content-Type": "application/json"
-
-    }
-
-    response = requests.post(GEMINI_API_URL, json=payload, headers=headers)
-
-    if response.status_code != 200:
-        return Response({"error": "Failed to generate quiz"}, status=500)
-
-    data = response.json()
-
-
-    try:
-        text = data["candidates"][0]["content"]["parts"][0]["text"]
-
-        # Convert string response to actual JSON list
-        import json
-        questions_list = json.loads(text)
-    except Exception as e:
-        return Response({"error": "Failed to parse Gemini response", "details": str(e)}, status=500)
-
-    # Save to QuizQuestion model
-    created_questions = []
-
-    for q in questions_list:
-
-        question = QuizQuestion.objects.create(
-
-            lesson=lesson,
-            
-            question_text=q["question_text"],
-            option_a=q["option_a"],
-            option_b=q["option_b"],
-            option_c=q["option_c"],
-            option_d=q["option_d"],
-            correct_option=q["correct_option"]
-
-        )
-        created_questions.append(question.id)
-
-
-    return Response({"created_questions": created_questions})
-    
 
 # Create your views here.
 class CreateUserView(generics.CreateAPIView):
@@ -146,9 +57,16 @@ class LessonViewSet(viewsets.ModelViewSet):
 
 
 class QuizQuestionViewSet(viewsets.ModelViewSet):
-    queryset = QuizQuestion.objects.all()
+    
     serializer_class = QuizQuestionSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticated]
+    queryset = QuizQuestion.objects.all()
+
+    def get_queryset(self):
+        lesson_id = self.request.query_params.get("lesson")
+        if lesson_id:
+            return QuizQuestion.objects.filter(lesson_id=lesson_id)
+        return QuizQuestion.objects.all()
 
 
 class UserProgressViewSet(viewsets.ModelViewSet):

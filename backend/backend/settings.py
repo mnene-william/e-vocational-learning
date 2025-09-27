@@ -25,7 +25,7 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
+SERVICE_ACCOUNT_FILE = os.path.join(BASE_DIR, "backend/credentials/gemini_service_account.json")
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
