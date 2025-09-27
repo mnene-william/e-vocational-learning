@@ -150,8 +150,9 @@ JAZZMIN_SETTINGS = {
         "api.Skill": "fas fa-lightbulb",
         "api.Lesson": "fas fa-book",
         "api.QuizQuestion": "fas fa-question-circle",
-        "api.UserProgress": "fas fa-chart-line",
         "api.Review": "fas fa-comments",
+        "api.LessonProgress": "fas fa-chart-line",
+        
     },
 
     # Sidebar
