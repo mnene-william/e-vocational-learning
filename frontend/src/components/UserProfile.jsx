@@ -16,25 +16,29 @@ function UserProfile() {
       );
   }, []);
 
-  const getAvatarUrl = (customUrl) => {
-    return customUrl || "/default-avatar.png";
-  };
+  const getAvatarUrl = (customUrl) => customUrl || "/default-avatar.png";
 
-  const userProgress =
+  // Combine lesson progress with quiz progress
+  const lessonProgress =
     profile?.progress?.filter((p) => p.progress_percentage > 0 || p.completed) ||
     [];
 
+  const quizProgress = profile?.quizzes || []; // assuming API returns user's quizzes
+
+  // Merge and sort by latest activity (optional)
+  const combinedProgress = [
+    ...lessonProgress.map((p) => ({ ...p, type: "lesson" })),
+    ...quizProgress.map((q) => ({ ...q, type: "quiz" })),
+  ].sort((a, b) => new Date(b.last_opened || b.completed_at) - new Date(a.last_opened || a.completed_at));
+
   return (
     <div className="min-h-screen bg-gray-100 py-10 px-4 md:px-6 flex justify-center">
-        <Navbar />
-    
+      <Navbar />
+
       <div className="w-full md:w-3/4">
-      
         {errorMsg && (
           <p className="mb-6 text-red-600 font-medium text-center">{errorMsg}</p>
         )}
-
-
 
         {profile && (
           <>
@@ -52,50 +56,64 @@ function UserProfile() {
 
                 <div className="mt-4 flex gap-4 flex-wrap">
                   <div className="bg-white/20 px-3 py-1 rounded-full text-sm font-medium">
-                    Lessons Started: {userProgress.length}
+                    Lessons Started: {lessonProgress.length}
                   </div>
                   <div className="bg-white/20 px-3 py-1 rounded-full text-sm font-medium">
-                    Completed: {userProgress.filter((p) => p.completed).length}
+                    Completed: {lessonProgress.filter((p) => p.completed).length}
+                  </div>
+                  <div className="bg-white/20 px-3 py-1 rounded-full text-sm font-medium">
+                    Quizzes Taken: {quizProgress.length}
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* My Progress Section */}
+            {/* Combined Progress Section */}
             <h2 className="text-2xl font-semibold mb-6 text-gray-800">My Progress</h2>
-            {userProgress.length === 0 ? (
+            {combinedProgress.length === 0 ? (
               <p className="text-gray-500 text-center">No progress yet.</p>
             ) : (
               <div className="grid md:grid-cols-2 gap-6">
-                {userProgress.map((p) => (
+                {combinedProgress.map((p, idx) => (
                   <div
-                    key={p.lesson}
+                    key={idx}
                     className="bg-white rounded-xl shadow-md p-4 hover:shadow-xl hover:scale-[1.02] transition-all duration-300"
                   >
                     <div className="flex justify-between items-center mb-2">
-                      <h3 className="font-semibold text-gray-800">{p.lesson_title}</h3>
+                      <h3 className="font-semibold text-gray-800">
+                        {p.type === "lesson" ? p.lesson_title : p.quiz_title}
+                      </h3>
                       <span className="text-sm text-gray-600">
-                        {p.progress_percentage ?? 0}%
+                        {p.type === "lesson"
+                          ? `${p.progress_percentage ?? 0}%`
+                          : `Score: ${p.score ?? 0}/${p.total_questions ?? 0}`}
                       </span>
                     </div>
 
-                    <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
-                      <motion.div
-                        initial={{ width: 0 }}
-                        animate={{ width: `${p.progress_percentage ?? 0}%` }}
-                        transition={{ duration: 1.2, ease: "easeOut" }}
-                        className={`h-4 rounded-full ${
-                          p.completed
-                            ? "bg-gradient-to-r from-green-400 to-green-600"
-                            : "bg-gradient-to-r from-indigo-400 to-indigo-600"
-                        }`}
-                      ></motion.div>
-                    </div>
+                    {p.type === "lesson" && (
+                      <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
+                        <motion.div
+                          initial={{ width: 0 }}
+                          animate={{ width: `${p.progress_percentage ?? 0}%` }}
+                          transition={{ duration: 1.2, ease: "easeOut" }}
+                          className={`h-4 rounded-full ${
+                            p.completed
+                              ? "bg-gradient-to-r from-green-400 to-green-600"
+                              : "bg-gradient-to-r from-indigo-400 to-indigo-600"
+                          }`}
+                        ></motion.div>
+                        {p.completed && (
+                          <p className="mt-2 text-green-600 font-semibold flex items-center gap-1">
+                            Completed
+                          </p>
+                        )}
+                      </div>
+                    )}
 
-                    {p.completed && (
-                      <p className="mt-2 text-green-600 font-semibold flex items-center gap-1">
-                        ✅ Completed
-                      </p>
+                    {p.type === "quiz" && (
+                      <div className="mt-2 p-2 bg-indigo-50 rounded-lg text-indigo-700 font-medium">
+                        {p.passed ? "✅ Passed" : "❌ Failed"}
+                      </div>
                     )}
                   </div>
                 ))}
@@ -109,6 +127,7 @@ function UserProfile() {
 }
 
 export default UserProfile;
+
 
 
 

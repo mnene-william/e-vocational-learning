@@ -15,7 +15,7 @@ function Footer(){
 
                     <div>
 
-                        <h2 className="text-xl font-bold text-white">E-Vocational Learning</h2>
+                        <h2 className="text-xl font-bold text-white">Skill Learn</h2>
 
                         <p className="mt-2 text-sm">
                             Empowering skills for the future
@@ -74,7 +74,7 @@ function Footer(){
 
                 <div className="mt-8 border-t border-gray-700 pt-6 text-center text-sm">
 
-                    <p>&copy; 2025 E-Vocational Learning . All rights reserved.</p>
+                    <p>&copy; 2025 SkillLearn . All rights reserved.</p>
 
                 </div>
 

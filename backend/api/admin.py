@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Skill, Lesson, QuizQuestion, UserProgress, Review
+from .models import Skill, Lesson, QuizQuestion, UserProgress, Review, ContactMessage
 
 @admin.register(Skill)
 class SkillAdmin(admin.ModelAdmin):
@@ -28,4 +28,10 @@ class ReviewAdmin(admin.ModelAdmin):
     list_display = ("user", "lesson", "rating", "created_at")
     list_filter = ("rating",)
     search_fields = ("comment",)
+
+@admin.register(ContactMessage)
+class ContactMessage(admin.ModelAdmin):
+    list_display = ("name", "email", "message", "created_at")
+    list_filter = ("created_at",)
+
 

@@ -46,10 +46,10 @@ function Quiz() {
 
   const getFeedbackMessage = () => {
     const percentage = (score / questions.length) * 100;
-    if (percentage === 100) return "🎉 Perfect score! Excellent job!";
-    if (percentage >= 75) return "👏 Great work! You did really well!";
-    if (percentage >= 50) return "🙂 Good effort! Keep practicing!";
-    return "😕 Don't worry, review the lesson and try again!";
+    if (percentage === 100) return " Perfect score! Excellent job!";
+    if (percentage >= 75) return " Great work! You did really well!";
+    if (percentage >= 50) return " Good effort! Keep practicing!";
+    return " Don't worry, review the lesson and try again!";
   };
 
   return (

@@ -135,14 +135,13 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 JAZZMIN_SETTINGS = {
     "site_title": "SkillLearn Admin",
-    "site_header": "SkillLearn Dashboard",
+    "site_header": "SkillLearn Admin",
     "site_brand": "SkillLearn",
     "welcome_sign": "Welcome to SkillLearn Admin Panel",
     "copyright": "SkillLearn Platform © 2025",
     
     # Optional: use your own logo (put logo in static folder)
-    "site_logo": "images/logo.png",
-    "site_logo_classes": "img-circle",
+
 
     # Icons for your models (FontAwesome icons)
     "icons": {

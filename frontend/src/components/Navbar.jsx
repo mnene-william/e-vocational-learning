@@ -67,7 +67,7 @@ function Navbar() {
             className="text-xl font-extrabold bg-gradient-to-r from-indigo-300 to-pink-400 bg-clip-text text-transparent 
                        px-3 py-1 rounded-lg backdrop-blur-sm bg-white/5 border border-white/10 hover:bg-white/10 transition-all"
           >
-            E-vocational Learning
+            SkillLearn
           </Link>
 
           {/* Centered Nav Links */}
