@@ -14,11 +14,26 @@ import requests
 
 
 
+
 # Create your views here.
 class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [permissions.AllowAny]
+
+
+    def post(self, request, *args, **kwargs):
+        serializer = UserSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+    
+    # Create profile
+        UserProfile.objects.get_or_create(user=user)
+    
+        return Response(serializer.data, status=201)
+
+    
+
 
 
 class SkillViewSet(viewsets.ModelViewSet):

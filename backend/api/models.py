@@ -86,6 +86,15 @@ class LessonProgress(models.Model):
     progress_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=0.0)
     last_opened = models.DateTimeField(auto_now=True)
 
+
+    class Meta:
+        unique_together = ('user', 'lesson') 
+
+    def __str__(self):
+        return f"{self.user.username} - {self.lesson.title} ({self.progress_percentage})"
+
+
+
     def __str__(self):
         return f"{self.user.username} - {self.lesson.title} ({self.progress_percentage})"
 

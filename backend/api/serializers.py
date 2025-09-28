@@ -9,8 +9,12 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {"password": {"write_only":True}}
 
 
+
     def create(self, validated_data):
-        return User.objects.create_user(**validated_data)
+        user = User.objects.create_user(**validated_data)
+
+        UserProfile.objects.create(user=user)
+        return user
     
 
 class SkillSerializer(serializers.ModelSerializer):
@@ -98,6 +102,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     email = serializers.EmailField(source="user.email", read_only=True)
     progress = serializers.SerializerMethodField()
+
 
     class Meta:
         model = UserProfile
