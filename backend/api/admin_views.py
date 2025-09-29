@@ -4,13 +4,13 @@ from .models import *
 from .serializers import *
 
 class AdminOnly(permissions.BasePermission):
-      def has_permision(self, request, view):
+      def has_permission(self, request, view):
             return request.user and request.user.is_staff
       
 
 class AdminUserViewSet(viewsets.ModelViewSet):
       queryset = User.objects.all()
-      serilizer_class = UserSerializer
+      serializer_class = UserSerializer
       permission_classes = [AdminOnly]
       
 class AdminLessonViewSet(viewsets.ModelViewSet):
@@ -22,11 +22,17 @@ class AdminLessonViewSet(viewsets.ModelViewSet):
 class AdminQuizViewSet(viewsets.ModelViewSet):
       queryset = QuizQuestion.objects.all()
       serializer_class = QuizQuestionSerializer
-      permission_class = [AdminOnly]
+      permission_classes = [AdminOnly]
 
-class AdminReviewSet(viewsets.ModelViewSet):
+class AdminReviewViewSet(viewsets.ModelViewSet):
       queryset = Review.objects.all()
       serializer_class = ReviewSerializer
+      permission_classes = [AdminOnly]
+
+
+class AdminUserProfileViewSet(viewsets.ModelViewSet):
+      queryset = UserProfile.objects.all()
+      serializer_class = UserProfileSerializer
       permission_classes = [AdminOnly]
 
 
