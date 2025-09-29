@@ -19,6 +19,18 @@ class AdminLessonViewSet(viewsets.ModelViewSet):
       permission_classes = [AdminOnly]
 
 
+class AdminQuizViewSet(viewsets.ModelViewSet):
+      queryset = QuizQuestion.objects.all()
+      serializer_class = QuizQuestionSerializer
+      permission_class = [AdminOnly]
+
+class AdminReviewSet(viewsets.ModelViewSet):
+      queryset = Review.objects.all()
+      serializer_class = ReviewSerializer
+      permission_classes = [AdminOnly]
+
+
+
 
       
 
