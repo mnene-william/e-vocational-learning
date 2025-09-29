@@ -8,6 +8,17 @@ class AdminOnly(permissions.BasePermission):
             return request.user and request.user.is_staff
       
 
+class AdminUserViewSet(viewsets.ModelViewSet):
+      queryset = User.objects.all()
+      serilizer_class = UserSerializer
+      permission_classes = [AdminOnly]
+      
+class AdminLessonViewSet(viewsets.ModelViewSet):
+      queryset = Lesson.objects.all()
+      serializer_class = LessonSerializer
+      permission_classes = [AdminOnly]
+
+
 
       
 
